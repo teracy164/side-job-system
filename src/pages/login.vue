@@ -13,12 +13,14 @@ interface State {
 
 export default defineComponent({
   setup(props, context) {
+      const router = useRouter();
     const state = reactive<State>({
       username: "initial value",
     });
 
     const login = () => {
       console.log("login", state.username);
+      router.push('/top')
     };
 
     return {
