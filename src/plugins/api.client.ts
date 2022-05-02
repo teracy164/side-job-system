@@ -9,7 +9,7 @@ class ApiClient {
     console.log('api client init');
   }
   async getTasks() {
-    return [{ id: 1, title: 'task1' }];
+    return [{ id: 1, title: 'task1', description: '説明' }];
   }
 }
 

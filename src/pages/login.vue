@@ -1,33 +1,43 @@
 <template>
-  <div>
-    <input v-model="state.username" />
-    <button @click="login">login</button>
-    <h1 class="text-3xl font-bold underline">
-      Hello world!
-    </h1>
+  <div class="container center h100">
+    <div class="card" style="width: 600px; max-width: 95%;">
+      <div class="form-item">
+        <label for="username">username</label>
+        <input v-model="form.username" id="username" />
+      </div>
+      <div class="form-item">
+        <label for="password">password</label>
+        <input v-model="form.password" id="password" />
+      </div>
+      <div style="margin-top: 20px">
+        <button @click="login">login</button>
+      </div>
+    </div>
   </div>
 </template>
 <script lang="ts">
-import { defineComponent } from "vue";
-
-interface State {
+interface Form {
   username: string;
+  password: string;
 }
 
 export default defineComponent({
   setup(props, context) {
     const router = useRouter();
-    const state = reactive<State>({
-      username: "initial value",
+    const { $auth } = useNuxtApp();
+    const form = reactive<Form>({
+      username: '',
+      password: ''
     });
 
     const login = () => {
-      console.log("login", state.username);
+      $auth.login();
+      console.log("login", form.username);
       router.push('/dashboard')
     };
 
     return {
-      state,
+      form,
       login,
     };
   },

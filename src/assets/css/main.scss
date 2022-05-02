@@ -1,0 +1,118 @@
+$headerHeight: 50px;
+$themeColor: #f6f6ff;
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: #f9f9ff;
+}
+
+header {
+  height: $headerHeight;
+  background-color: #ccccff;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 10px;
+}
+
+main {
+  padding: 10px;
+}
+
+.h100 {
+  height: calc(100vh - #{$headerHeight});
+}
+
+.container {
+  display: flex;
+
+  &.center {
+    align-items: center;
+    justify-content: center;
+  }
+}
+
+.card {
+  background-color: white;
+  border-radius: 5px;
+  border: 1px solid #f0f0f0;
+  box-shadow: 3px 3px 3px lightgray;
+  padding: 10px;
+
+  .title {
+    font-size: 1.5em;
+    border-bottom: 1px solid #e0e0e0;
+    margin-bottom: 10px;
+  }
+}
+
+a {
+  color: #6666ff;
+  cursor: pointer;
+}
+a:hover {
+  color: #9999ff;
+}
+a:active {
+  transform: translateX(1px) translateY(1px);
+}
+
+button {
+  background-color: #9999ff;
+  color: white;
+  border: 0;
+  border-radius: 3px;
+  box-shadow: 1px 1px 3px lightgray;
+  padding: 5px 10px;
+
+  &.danger {
+    background-color: #ff9999;
+  }
+}
+
+button:hover {
+  opacity: 0.8;
+}
+
+button:active {
+  transform: translateX(1px) translateY(1px);
+}
+
+input {
+  border: 1px solid lightgray;
+  border-radius: 3px;
+  padding: 5px 10px;
+  outline: none;
+}
+input:hover {
+  background-color: #f9f9f9;
+}
+input:active {
+  border: 1px solid #efefff;
+}
+input:focus {
+  border: 1px solid #aaaaff;
+}
+
+.form-item {
+  position: relative;
+  margin-top: 1.5em;
+
+  label {
+    position: absolute;
+    bottom: 100%;
+    height: 1.5em;
+    line-height: 1.5em;
+    font-size: 0.8em;
+    font-weight: bold;
+  }
+
+  input {
+    width: 100%;
+  }
+}

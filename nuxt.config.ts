@@ -6,4 +6,6 @@ export default defineNuxtConfig({
   typescript: {
     strict: true,
   },
+  css: ['@/assets/css/main.scss'],
+  plugins: ['@/plugins/api.client.ts', '@/plugins/auth.client.ts'],
 });

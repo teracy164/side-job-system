@@ -1,6 +1,8 @@
 <template>
   <div v-if="state.isInitialized">
-    <router-view></router-view>
+    <NuxtLayout>
+      <NuxtPage />
+    </NuxtLayout>
   </div>
 </template>
 <script lang="ts">
@@ -10,21 +12,18 @@ interface State {
 
 export default defineComponent({
   setup(props, context) {
-    const state = reactive<State>({
-      isInitialized: false,
-    });
-
-
-    const isLoggedIn = () => {
-      const token = localStorage.getItem("token");
-      return !!token;
-    }
+    const state = reactive<State>({ isInitialized: false });
+    const { $auth } = useNuxtApp();
 
     onMounted(() => {
-      console.log("mounted");
+      console.log("auth check");
 
       state.isInitialized = true;
-      nextTick(() => useRouter().push(isLoggedIn() ? "dashboard" : "login"));
+      nextTick(() => {
+        if (!$auth.isLoggedIn()) {
+          useRouter().push("login")
+        }
+      });
     });
 
     return {
