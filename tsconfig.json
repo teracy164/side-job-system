@@ -1,4 +1,10 @@
 {
   // https://v3.nuxtjs.org/concepts/typescript
-  "extends": "./.nuxt/tsconfig.json"
+  "extends": "./src/.nuxt/tsconfig.json",
+  "vueCompilerOptions": {
+    "experimentalDisableTemplateSupport": true
+  },
+  "compilerOptions": {
+    "jsx": "preserve"
+  }
 }
