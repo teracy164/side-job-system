@@ -4,11 +4,14 @@
       <TaskCard v-for="task of tasks" :task="task" @onclick="showDetail" />
     </div>
     <div v-if="selected" class="detail-panel" @click="hiddenDetail">
-      <div class="wrapper">
+      <div class="btn-area">
         <button class="btn-close icon-btn" @click="hiddenetail">
           <GoogleIcon icon="close" />
         </button>
-        <TaskDetail :task="selected" @onclose="hiddenDetail" @click.stop="" />
+      </div>
+
+      <div class="wrapper" @click.stop="">
+        <TaskDetail :task="selected" />
       </div>
     </div>
   </div>
@@ -27,10 +30,14 @@ export default defineComponent({
     const tasks = await $api.getTasks();
     const data = reactive<{ selected: Task | null }>({ selected: null });
 
-    return {
-      tasks,
-      ...data,
-    };
+    return { tasks, ...data };
+  },
+  mounted() {
+    document.addEventListener('keyup', (event: KeyboardEvent) => {
+      if (event.key.toLocaleLowerCase() === 'escape') {
+        this.hiddenDetail();
+      }
+    })
   },
   methods: {
     searchTasks() {
@@ -42,6 +49,7 @@ export default defineComponent({
       this.$forceUpdate();
     },
     hiddenDetail() {
+      console.log('hidden')
       this.selected = null;
       this.$forceUpdate();
     }
@@ -57,34 +65,36 @@ export default defineComponent({
 
 .detail-panel {
   $panelPadH: 20px;
-  $panelPadV: 40px;
+  $panelPadV: 20px;
 
   position: fixed;
   top: 0;
   left: 0;
+  z-index: 1000;
   padding: $panelPadV $panelPadH;
   width: calc(100vw - ($panelPadH * 2));
   height: calc(100vh - ($panelPadV * 2));
   overflow: auto;
   background-color: rgb(0, 0, 0, 0.7);
 
-  .wrapper {
-    position: relative;
-    background-color: white;
-    border-radius: 5px;
-    padding: 20px;
-    width: calc(100% - 40px);
+  .btn-area {
+    width: 100%;
+    text-align: right;
 
     .btn-close {
-      position: absolute;
-      bottom: 100%;
-      right: 0;
       color: white;
     }
 
     .btn-close:hover {
       background-color: rgba(100, 100, 100, 0.7);
     }
+  }
+
+  .wrapper {
+    background-color: white;
+    border-radius: 5px;
+    padding: 20px;
+    width: calc(100% - 40px);
   }
 }
 </style>

@@ -5,8 +5,8 @@
         </div>
         <div v-show="isShow" ref="overlayPanel" class="overlay-panel">
             <div v-if="isShow" class="menu-items">
-                <div v-for="item of menuItems" class="menu-item">
-                    <a @click="onclick($event, item)">{{ item.message }}</a>
+                <div v-for="item of menuItems" class="menu-item" @click="onclick($event, item)">
+                    <a>{{ item.message }}</a>
                 </div>
             </div>
         </div>
@@ -17,7 +17,7 @@ import { PropType } from "vue";
 
 export interface DropdownItem {
     message: string;
-    link: string;
+    link?: string;
     onclick?: (event: Event) => void;
     // TODO
     children?: DropdownItem[];
@@ -80,7 +80,7 @@ export default defineComponent({
     },
 });
 </script>
-<style lang="scss">
+<style lang="scss" scoped>
 .dropdown-menu {
     cursor: pointer;
     user-select: none;
@@ -104,14 +104,24 @@ export default defineComponent({
 
 .overlay-panel {
     position: absolute;
-    padding: 10px;
+    padding: 10px 0;
     background-color: white;
     border-radius: 5px;
     box-shadow: 1px 1px 10px lightgray;
+    z-index: 1001;
 
     .menu-items {
         .menu-item {
-            margin-bottom: 5px;
+            padding: 3px 10px;
+            cursor: pointer;
+
+            a:hover {
+                color: #6666ff;
+            }
+        }
+
+        .menu-item:hover {
+            background-color: #f6f6f6;
         }
 
         .menu-item:last-child {

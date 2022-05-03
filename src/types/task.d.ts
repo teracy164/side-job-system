@@ -9,4 +9,6 @@ export interface Task {
   expireDate: string;
   recruitmentNumber: number;
   assigners: User[];
+  tags: string[];
+  note: string;
 }

@@ -42,13 +42,14 @@ export default defineComponent({
     components: { DropdownMenu }
 });
 </script>
-<style lang="scss">
+<style lang="scss" scoped>
 @import '@/assets/css/valiable.scss';
 
 header {
     position: fixed;
     top: 0;
     left: 0;
+    z-index: 10;
     width: 100%;
     height: $headerHeight;
     background-color: rgba(200, 200, 255, 0.2);

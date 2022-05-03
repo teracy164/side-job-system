@@ -1,23 +1,49 @@
 <template>
     <div class="detail">
         <div class="title">
-            <h1>{{ task.title }}</h1>
+            <div style="display: flex;justify-content: space-between;">
+                <h1> {{ task.title }} </h1>
+                <div><span class="status success">未着手</span></div>
+            </div>
             <div>
                 依頼者：{{ task.client }}
             </div>
+            <div class="tags">
+                <div v-for="tag of task.tags" class="tag">{{ tag }}</div>
+            </div>
         </div>
         <div class="contents">
-            <pre>{{ task.description }}</pre>
-            <div>
-                報酬：{{ $currency(task.price) }}
-                期限：{{ $dateFormat(task.expireDate) }}
+            <h4><label>概要</label></h4>
+            <div class="content">
+                <pre>{{ task.description }}</pre>
             </div>
-            <div>
-                仕事を受けた人
-                <div v-if="task.assigners?.length" v-for="assigner of task.assigners">
-                    {{ assigner.name }}
+
+            <h4><label>条件等</label></h4>
+            <div class="content" style="display: flex; flex-wrap: wrap">
+                <div style="flex-basis: 30%"><label>報酬</label></div>
+                <div style="flex-basis: 70%">{{ $currency(task.price) }}</div>
+                <div style="flex-basis: 30%"><label>期限</label></div>
+                <div style="flex-basis: 70%">{{ $dateFormat(task.expireDate) }}</div>
+                <div style="flex-basis: 30%"><label>受領条件</label></div>
+                <div style="flex-basis: 70%">XX等級以上。Excel得意</div>
+            </div>
+
+            <h4><label>募集状況</label></h4>
+            <div class="content" style="display: flex; flex-wrap: wrap">
+                <div style="flex-basis: 30%"><label>募集人数</label></div>
+                <div style="flex-basis: 70%">{{ task.recruitmentNumber }}</div>
+                <div style="flex-basis: 30%"><label>仕事を受けた人</label></div>
+                <div style="flex-basis: 70%">
+                    <div v-if="task.assigners?.length" v-for="assigner of task.assigners">
+                        {{ assigner.name }}
+                    </div>
+                    <div v-else>なし</div>
                 </div>
-                <div v-else>なし</div>
+            </div>
+
+            <h4><label>その他備考</label></h4>
+            <div class="content">
+                <pre>{{ task.note }}</pre>
             </div>
         </div>
         <div class="footer">
@@ -45,14 +71,30 @@ export default defineComponent({
             type: Object as PropType<Task>,
         }
     },
-    setup() {
-        console.log('detail start')
-    },
     components: { GoogleIcon },
 });
 </script>
 <style lang="scss">
 .detail {
+    h1 {
+        margin: 0;
+        font-size: 1.5em;
+    }
+
+    h4 {
+        margin-bottom: 0;
+
+        label {
+            border-bottom: 1px solid black;
+        }
+    }
+
+    .status {
+        border-radius: 5px;
+        color: white;
+        padding: 3px 5px;
+        font-size: 0.9px;
+    }
 
     pre {
         margin: 0;
@@ -60,7 +102,30 @@ export default defineComponent({
         white-space: pre-wrap;
     }
 
+    .contents {
+        .content {
+            padding: 5px 20px;
+        }
+    }
+
+    .tags {
+        display: flex;
+        flex-wrap: wrap;
+
+        .tag {
+            background-color: #9999ff;
+            border-radius: 20px;
+            padding: 0px 10px;
+            margin-right: 3px;
+            font-size: 0.8em;
+            color: white;
+        }
+    }
+
     .footer {
+        margin-top: 20px;
+        border-top: 1px solid lightgray;
+        padding-top: 10px;
         display: flex;
         justify-content: space-between;
     }

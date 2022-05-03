@@ -11,7 +11,7 @@ export default defineComponent({
     }
 });
 </script>
-<style lang="scss">
+<style lang="scss" scoped>
 i {
     margin-right: 3px;
     font-size: 16px !important;

@@ -1,5 +1,4 @@
 @import './valiable.scss';
-$themeColor: #f6f6ff;
 
 html,
 body {
@@ -49,6 +48,16 @@ body {
   }
 }
 
+.primary {
+  background-color: #9999ff;
+}
+.danger {
+  background-color: #ff9999;
+}
+.success {
+  background-color: #66cc66;
+}
+
 a {
   color: #6666ff;
   cursor: pointer;
@@ -67,10 +76,6 @@ button {
   border-radius: 3px;
   box-shadow: 1px 1px 3px lightgray;
   padding: 5px 10px;
-
-  &.danger {
-    background-color: #ff9999;
-  }
 }
 
 button:hover {
