@@ -6,9 +6,7 @@
   </div>
 </template>
 <script lang="ts">
-interface State {
-  isInitialized: boolean;
-}
+interface State { isInitialized: boolean; }
 
 export default defineComponent({
   setup(props, context) {

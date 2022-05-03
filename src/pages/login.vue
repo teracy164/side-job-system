@@ -1,6 +1,6 @@
 <template>
   <div class="container center h100">
-    <div class="card" style="width: 600px; max-width: 95%;">
+    <div class="card" style="width: 400px; max-width: 95%;">
       <div class="form-item">
         <label for="username">username</label>
         <input v-model="form.username" id="username" />
@@ -16,10 +16,7 @@
   </div>
 </template>
 <script lang="ts">
-interface Form {
-  username: string;
-  password: string;
-}
+interface Form { username: string; password: string; }
 
 export default defineComponent({
   setup(props, context) {
@@ -33,7 +30,7 @@ export default defineComponent({
     const login = () => {
       $auth.login();
       console.log("login", form.username);
-      router.push('/dashboard')
+      router.replace('/dashboard')
     };
 
     return {

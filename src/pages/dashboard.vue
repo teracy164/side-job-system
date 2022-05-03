@@ -1,16 +1,13 @@
 <template>
   <div>
-    tasks
-    <div v-for="task of tasks" class="tasks">
-      <div class="card task">
-        <div class="title">{{ task.title }}</div>
-        <div class="contens">{{ task.description }}</div>
-      </div>
+    <div class="tasks">
+      <TaskCard v-for="task of tasks" :task="task" />
     </div>
   </div>
 </template>
 <script lang="ts">
-// TODO レイアウトが上手く動かない
+import TaskCard from '../components/task/task-card.vue';
+
 definePageMeta({ layout: 'authenticated' });
 
 export default defineComponent({
@@ -20,24 +17,20 @@ export default defineComponent({
 
     return {
       tasks
-    }
+    };
   },
-
   methods: {
     searchTasks() {
       const { $api } = useNuxtApp();
       return $api.getTasks();
     }
-  }
+  },
+  components: { TaskCard }
 });
 </script>
 <style lang="scss">
 .tasks {
   display: flex;
   flex-wrap: wrap;
-
-  .task {
-    width: 200px;
-  }
 }
 </style>

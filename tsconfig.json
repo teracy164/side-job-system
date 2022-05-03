@@ -5,6 +5,7 @@
     "experimentalDisableTemplateSupport": true
   },
   "compilerOptions": {
-    "jsx": "preserve"
+    "jsx": "preserve",
+    "typeRoots": ["./src/types"]
   }
 }
