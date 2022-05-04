@@ -21,8 +21,7 @@ class AuthService {
   }
   async logout() {
     localStorage.removeItem(TOKEN_KEY);
-    const router = useRouter();
-    router.replace('login');
+    navigateTo({ path: '/login' });
   }
 }
 

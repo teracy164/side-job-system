@@ -1,12 +1,11 @@
 <template>
     <div class="detail">
         <div class="title">
-            <div style="display: flex;justify-content: space-between;">
-                <h1> {{ task.title }} </h1>
-                <div><span class="status success">未着手</span></div>
-            </div>
-            <div>
-                依頼者：{{ task.client }}
+            <h1> {{ task.title }} </h1>
+            <div class="v-center">
+                <div class="mr-10 ">依頼者：{{ task.client }}</div>
+                <div class="mr-10 ">作成日：{{ $dateFormat(task.createdAt) }}</div>
+                <div class="mr-10 ">作成者：{{ task.createUserId }}</div>
             </div>
             <div class="tags">
                 <div v-for="tag of task.tags" class="tag">{{ tag }}</div>
@@ -74,8 +73,10 @@ export default defineComponent({
     components: { GoogleIcon },
 });
 </script>
-<style lang="scss">
+<style lang="scss" scoped>
 .detail {
+    width: 100%;
+
     h1 {
         margin: 0;
         font-size: 1.5em;
@@ -93,13 +94,7 @@ export default defineComponent({
         border-radius: 5px;
         color: white;
         padding: 3px 5px;
-        font-size: 0.9px;
-    }
-
-    pre {
-        margin: 0;
-        font: inherit;
-        white-space: pre-wrap;
+        font-size: 0.8em;
     }
 
     .contents {

@@ -11,4 +11,8 @@ export interface Task {
   assigners: User[];
   tags: string[];
   note: string;
+  createdAt: string;
+  createUserId: number;
+  updatedAt: string;
+  updateUserId: number;
 }

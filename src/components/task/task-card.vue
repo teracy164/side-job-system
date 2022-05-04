@@ -1,7 +1,7 @@
 <template>
     <div class="card task" @click="onclick($event, task)">
-        <div class="title">
-            {{ task.title }}
+        <div class="header">
+            <p class="title" :title="task.title">{{ task.title }}</p>
             <div style="display:flex; align-items: center; font-size: 0.6em; zoom:90%;">
                 <GoogleIcon icon="account_circle" title="依頼者" />{{ task.client }}
             </div>
@@ -45,9 +45,20 @@ export default defineComponent({
     components: { GoogleIcon },
 });
 </script>
-<style lang="scss">
+<style lang="scss" scoped>
+.header {
+    .title {
+        white-space: nowrap;
+        max-width: 100%;
+        overflow-x: hidden;
+        text-overflow: ellipsis;
+        margin: 0
+    }
+}
+
 .task {
-    width: 250px;
+    min-width: 250px;
+    max-width: 250px;
     margin: 5px;
 }
 
@@ -61,12 +72,6 @@ export default defineComponent({
         height: 150px;
         max-height: 150px;
         overflow-y: auto;
-
-        pre {
-            font: inherit;
-            white-space: pre-wrap;
-            margin: 0;
-        }
     }
 }
 </style>

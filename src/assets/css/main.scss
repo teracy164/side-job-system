@@ -14,6 +14,14 @@ body {
   height: calc(100vh - #{$headerHeight});
 }
 
+.mr-10 {
+  margin-right: 10px;
+}
+
+.p-10 {
+  padding: 10px;
+}
+
 .container {
   display: flex;
 
@@ -30,7 +38,7 @@ body {
   box-shadow: 3px 3px 3px lightgray;
   padding: 10px;
 
-  .title {
+  .header {
     font-size: 1.3em;
     border-bottom: 1px solid #e0e0e0;
   }
@@ -67,6 +75,12 @@ a:hover {
 }
 a:active {
   transform: translateX(1px) translateY(1px);
+}
+
+pre {
+  font: inherit;
+  white-space: pre-wrap;
+  margin: 0;
 }
 
 button {
