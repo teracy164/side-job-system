@@ -28,10 +28,12 @@ export default defineComponent({
         }
     },
     setup(props, context) {
-        const onclose = (event: Event, task: Task) => {
-            console.log('onclose')
-            context.emit('onclose', event, task)
-        };
+        const onclose = (event: Event, task: Task) => context.emit('onclose', event, task);
+        document.addEventListener('keyup', e => {
+            if (e.key.toLocaleLowerCase() === 'escape') {
+                onclose(e, props.task);
+            }
+        })
         return { onclose }
     },
     components: { GoogleIcon },

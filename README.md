@@ -1,29 +1,13 @@
-# Nuxt 3 Minimal Starter
+# 社内副業システム -ShaFuku-
 
-We recommend to look at the [documentation](https://v3.nuxtjs.org).
+### install
 
-## Setup
-
-Make sure to install the dependencies
-
-```bash
-yarn install
+```shell
+lerna bootstrap
 ```
 
-## Development
+### run dev
 
-Start the development server on http://localhost:3000
-
-```bash
+```shell
 yarn dev
 ```
-
-## Production
-
-Build the application for production:
-
-```bash
-yarn build
-```
-
-Checkout the [deployment documentation](https://v3.nuxtjs.org/docs/deployment).

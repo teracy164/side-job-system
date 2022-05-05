@@ -24,7 +24,7 @@ export interface DropdownItem {
     icon?: string;
     onclick?: (event: Event) => void;
     // TODO
-    children?: DropdownItem[];
+    // children?: DropdownItem[];
 }
 
 export default defineComponent({
@@ -104,10 +104,6 @@ export default defineComponent({
     position: relative;
 }
 
-.dropdown-menu:active {
-    transform: translateX(1px) translateY(1px);
-}
-
 .title {
     cursor: pointer;
     user-select: none;
@@ -135,8 +131,12 @@ export default defineComponent({
     content: '▲';
 }
 
-.title:hover {
-    background-color: #e6e6ff;
+// .title:hover {
+//     background-color: #e6e6ff;
+// }
+
+.title:active {
+    transform: translateX(1px) translateY(1px);
 }
 
 .overlay-panel {

@@ -8,8 +8,12 @@
                 </div>
             </div>
             <div class="v-center" style="height: 100%">
-                <a class="menu-item mr-10" @click="navigate('/tasks')">仕事を探す</a>
-                <a class="menu-item mr-10" @click="navigate('/board')">マイボード</a>
+                <a class="menu-item mr-10 v-center" @click="navigate('/tasks')">
+                    <GoogleIcon icon="search" />仕事を探す
+                </a>
+                <a class="menu-item mr-10 v-center" @click="navigate('/achievements ')">
+                    <GoogleIcon icon="emoji_events" />実績
+                </a>
                 <DropdownMenu :title="'管理者用'" :menu-items="adminMenuItems" />
                 <DropdownMenu icon="manage_accounts" :menu-items="menuItems" />
             </div>
@@ -18,6 +22,7 @@
 </template>
 <script lang="ts">
 import DropdownMenu, { DropdownItem } from "@/components/parts/dropdown-menu.vue";
+import GoogleIcon from "./google-icon.vue";
 export default defineComponent({
     setup() {
         const logout = () => {
@@ -48,7 +53,7 @@ export default defineComponent({
             router.push(path);
         },
     },
-    components: { DropdownMenu }
+    components: { DropdownMenu, GoogleIcon }
 });
 </script>
 <style lang="scss" scoped>

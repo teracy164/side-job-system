@@ -1,5 +1,23 @@
 <template>
   <div>
+    <div>
+      <fieldset>
+        <label class="legend">検索する</label>
+        <div class="v-center">
+          <div class="form-item" style="margin-right: 20px">
+            <label>キーワード</label>
+            <input style="width: 200px">
+          </div>
+          <div class="form-item">
+            <label>タグ</label>
+            <input style="width: 200px">
+          </div>
+        </div>
+        <div>
+          <input type="checkbox" style="width: unset;">空きのあるタスクのみ表示
+        </div>
+      </fieldset>
+    </div>
     <div class="tasks">
       <TaskCard v-for="task of tasks" :task="task" @onclick="showDetail" />
     </div>
