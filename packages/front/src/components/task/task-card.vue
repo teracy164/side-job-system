@@ -2,8 +2,8 @@
     <div class="card task" @click="onclick($event, task)">
         <div class="header">
             <p class="title" :title="task.title">{{ task.title }}</p>
-            <div style="display:flex; align-items: center; font-size: 0.6em; zoom:90%;">
-                <GoogleIcon icon="account_circle" title="依頼者" />{{ task.client }}
+            <div style="display:flex; align-items: center; font-size: 0.7rem;">
+                <GoogleIcon icon="account_circle" title="依頼者" font-size="1.3em" />{{ task.client }}
             </div>
         </div>
         <div class="contents">
@@ -69,8 +69,8 @@ export default defineComponent({
 
 .card {
     .contents {
-        height: 150px;
-        max-height: 150px;
+        height: 120px;
+        max-height: 120px;
         overflow-y: auto;
     }
 }

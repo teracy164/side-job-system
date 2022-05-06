@@ -1,14 +1,16 @@
 <template>
   <div>
     <div>
-      <div style="padding:10px">
-        <BarChart v-if="showableChart" :data="chartData" height="250" />
+      <div style="padding:10px;">
+        <BarChart :data="chart.data" :height="chart.height" />
       </div>
     </div>
     <div>
       <h4><label>受領中</label></h4>
-      <div style="padding:10px">
-        TODO
+      <div style="padding:10px;">
+        <div class="wrapper" style="max-width: 100%; overflow-x: auto;display: flex; zoom: 80%;">
+          <TaskCard v-for="task of tasks" :task="task" @click="showDetail(task)" />
+        </div>
       </div>
     </div>
     <div>
@@ -19,7 +21,7 @@
         </div>
       </div>
       <div style="padding: 10px">
-        <table>
+        <table class="row-clickable">
           <thead>
             <tr>
               <th>仕事</th>
@@ -29,7 +31,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr v-for="task of tasks" @click="detail = task">
+            <tr v-for="task of tasks" @click="showDetail(task)">
               <td>{{ task.title }}</td>
               <td>{{ task.client }}</td>
               <td>{{ $currency(task.price) }}</td>
@@ -38,7 +40,7 @@
           </tbody>
         </table>
       </div>
-      <TaskDetailOverlay v-if="detail" :task="detail" @onclose="detail = null" />
+      <TaskDetailOverlay v-if="detail" :task="detail" @onclose="hiddenDetail()" />
     </div>
   </div>
 </template>
@@ -46,19 +48,21 @@
 import { Task } from "~~/types/task";
 import TaskDetailOverlay from "~~/components/task/task-detail-overlay.vue";
 import BarChart from "~~/components/parts/chart/bar-chart.vue";
+import TaskCard from "~~/components/task/task-card.vue";
+import { ChartData } from "chart.js";
 
 definePageMeta({ layout: 'authenticated', middleware: ['auth'] });
 export default defineComponent({
   setup() {
-    const chartData: any = null;
-    const showableChart = ref(false);
+    const tasks: Task[] = [];
+    const chart = ref<{ showable: boolean; height: number; data: ChartData | null }>({
+      showable: false,
+      height: 200,
+      data: null,
+    });
 
-    const data = reactive<{
-      tasks: Task[];
-      detail: Task | null;
-      chartOptions: any,
-    }>({ tasks: [], detail: null, chartOptions: null });
-    return { ...data, showableChart, chartData };
+    const data = reactive<{ detail: Task | null }>({ detail: null });
+    return { ...data, tasks, chart };
   },
   async mounted() {
     this.tasks = await this.$api.getTasks();
@@ -66,20 +70,28 @@ export default defineComponent({
   },
   methods: {
     setChartData() {
-      this.showableChart = false;
+      this.chart.showable = false;
       const test = Math.random() * 10000
-      this.chartData = {
+      this.chart.data = {
         labels: ["12月", "1月", "2月", "3月", "4月", "5月", "6月", "7月", "8月", "9月", "10月", "11月"],
         datasets: [{
           label: "月ごとの合計報酬",
           data: [test, 0, 0, 1500, 0, 6000, 10000, 0, 2000, 0, 0, 1500],
-          backgroundColor: 'lightblue'
+          backgroundColor: '#9999ff'
         }]
       };
-      this.$nextTick(() => this.showableChart = true)
+      this.$nextTick(() => this.chart.showable = true)
     },
+    showDetail(task: Task) {
+      this.detail = task;
+      this.$forceUpdate();
+    },
+    hiddenDetail() {
+      this.detail = null;
+      this.$forceUpdate();
+    }
   },
-  components: { TaskDetailOverlay, BarChart }
+  components: { TaskDetailOverlay, BarChart, TaskCard }
 });
 </script>
 <style lang="scss" scoped>
@@ -89,18 +101,6 @@ h4 {
   label {
     border-bottom: 1px solid black;
 
-  }
-}
-
-table {
-  tbody {
-    tr {
-      cursor: pointer;
-    }
-
-    tr:hover {
-      background-color: #eeeeff;
-    }
   }
 }
 </style>

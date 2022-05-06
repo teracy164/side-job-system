@@ -49,6 +49,8 @@ export default defineComponent({
     height: 100vh;
     overflow: auto;
     background-color: rgb(0, 0, 0, 0.7);
+    display: flex;
+    justify-content: center;
 
     .wrapper {
         padding: 20px;
@@ -67,7 +69,8 @@ export default defineComponent({
         }
 
         .task {
-            width: 100%;
+            width: 800px;
+            max-width: 95vw;
 
             .task-wrapper {
                 background-color: white;

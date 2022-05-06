@@ -8,7 +8,12 @@
         <div v-show="isShow" ref="overlayPanel" class="overlay-panel">
             <div v-if="isShow" class="menu-items">
                 <div v-for="item of menuItems" class="menu-item" @click="onclick($event, item)">
-                    <a>{{ item.message }}</a>
+                    <router-link v-if="item.link" :to="item.link" class="v-center">
+                        <GoogleIcon v-if="item.icon" :icon="item.icon" />{{ item.message }}
+                    </router-link>
+                    <a v-else class="v-center">
+                        <GoogleIcon v-if="item.icon" :icon="item.icon" />{{ item.message }}
+                    </a>
                 </div>
             </div>
         </div>

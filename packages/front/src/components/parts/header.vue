@@ -3,17 +3,17 @@
         <div class="wrapper">
             <div style="height: 100%">
                 <div class="logo" @click="navigate('/')">
-                    <h1>ShaFuku</h1>
+                    <h1><span class="s">S</span>ha<span class="f">F</span>uku</h1>
                     <span class="subtitle">-社内副業システム-</span>
                 </div>
             </div>
             <div class="v-center" style="height: 100%">
-                <a class="menu-item mr-10 v-center" @click="navigate('/tasks')">
+                <router-link to="/tasks" class="menu-item mr-10 v-center">
                     <GoogleIcon icon="search" />仕事を探す
-                </a>
-                <a class="menu-item mr-10 v-center" @click="navigate('/achievements ')">
+                </router-link>
+                <router-link to="/achievements" class="menu-item mr-10 v-center">
                     <GoogleIcon icon="emoji_events" />実績
-                </a>
+                </router-link>
                 <DropdownMenu :title="'管理者用'" :menu-items="adminMenuItems" />
                 <DropdownMenu icon="manage_accounts" :menu-items="menuItems" />
             </div>
@@ -31,14 +31,14 @@ export default defineComponent({
         };
 
         const menuItems: DropdownItem[] = [
-            { message: '設定', link: 'setting' },
-            { message: 'ログアウト', onclick: logout }
+            { message: '設定', icon: 'settings', link: '/settings' },
+            { message: 'ログアウト', icon: 'logout', onclick: logout }
         ];
 
         const adminMenuItems: DropdownItem[] = [
-            { message: '仕事を依頼する' },
-            { message: 'メンバーの状況を確認' },
-            { message: 'ユーザー一覧' },
+            { message: '仕事の依頼', icon: 'playlist_add', link: '/management/tasks' },
+            { message: 'メンバーの状況', icon: 'supervised_user_circle' },
+            { message: 'ユーザー一覧', icon: 'groups', link: '/management/users' },
         ];
 
         return { menuItems, adminMenuItems }
@@ -86,6 +86,12 @@ header {
     flex-direction: column;
     justify-content: center;
     padding: 0px 5px;
+
+    .s,
+    .f {
+        color: #9999ff;
+        font-size: 26px;
+    }
 
     h1 {
         font-size: 1.2em;
