@@ -17,6 +17,7 @@ import { SequelizeModule } from '@nestjs/sequelize';
       database: process.env.DATABASE_NAME || 'test',
       username: process.env.DATABASE_USER || 'root',
       password: process.env.DATABASE_PASSWORD || 'root',
+      ssl: Boolean(process.env.DATABASE_SSL || false),
       autoLoadModels: true,
       synchronize: true,
       sync: {
