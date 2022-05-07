@@ -8,7 +8,7 @@
                 <div class="mr-10 ">作成者：{{ task.createUserId }}</div>
             </div>
             <div class="tags">
-                <div v-for="tag of task.tags" class="tag">{{ tag }}</div>
+                <div v-for="tag of tags()" class="tag">{{ tag }}</div>
             </div>
         </div>
         <div class="contents">
@@ -69,6 +69,11 @@ export default defineComponent({
             required: true,
             type: Object as PropType<Task>,
         }
+    },
+    methods: {
+        tags() {
+            return this.task.tags.split(',');
+        },
     },
     components: { GoogleIcon },
 });
