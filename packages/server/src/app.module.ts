@@ -4,12 +4,6 @@ import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
 import { SequelizeModule } from '@nestjs/sequelize';
 
-console.log('host', process.env.DATABASE_HOST || 'localhost');
-console.log('db', process.env.DATABASE_NAME || 'test');
-console.log('user', process.env.DATABASE_USER || 'root');
-console.log('password', process.env.DATABASE_PASSWORD || 'root');
-console.log('db ssl:', Boolean(process.env.DATABASE_SSL || false));
-
 const dialectOptions: { ssl: boolean | any } = { ssl: false };
 if (process.env.DATABASE_SSL) {
   dialectOptions.ssl = { require: true, rejectUnauthorized: false };
@@ -18,7 +12,7 @@ if (process.env.DATABASE_SSL) {
 @Module({
   imports: [
     ServeStaticModule.forRoot({
-      rootPath: join(__dirname, '../..', 'front/dist'),
+      rootPath: join(__dirname, '../..', 'front/src/.output/server'),
       exclude: ['/api/*'],
     }),
     SequelizeModule.forRoot({
