@@ -3,8 +3,9 @@
   "private": true,
   "scripts": {
     "lerna": "lerna",
+    "clean": "lerna clean -y",
     "postinstall": "lerna bootstrap",
-    "build": "lerna run build:prod",
+    "build": "lerna run build:prod --stream",
     "start": "lerna run start:prod",
     "dev": "docker-compose --file=docker-compose.yml --file=docker-compose.dev.yml up"
   },
