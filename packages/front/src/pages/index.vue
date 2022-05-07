@@ -48,8 +48,8 @@ export default defineComponent({
   },
   async mounted() {
     const { $api } = useNuxtApp();
-    const result = await $api.getTasks();
-    this.tasks = result.data.slice(0, 5)
+    const tasks = await $api.getTasks();
+    this.tasks = tasks.slice(0, 5)
   },
   methods: {
     showTaskDetail(event: Event, task: Task) {

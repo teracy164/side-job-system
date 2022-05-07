@@ -39,8 +39,7 @@ export default defineComponent({
     return data;
   },
   async mounted() {
-    const result = await this.$api.getTasks();
-    this.tasks = result.data;
+    this.tasks = await this.$api.getTasks();
   },
   components: { TaskDetailOverlay }
 });

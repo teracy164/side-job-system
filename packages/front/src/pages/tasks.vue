@@ -40,8 +40,7 @@ export default defineComponent({
   },
   async mounted() {
     const { $api } = useNuxtApp();
-    const result = await $api.getTasks();
-    this.tasks = result.data;
+    this.tasks = await $api.getTasks();
     document.addEventListener('keyup', (event: KeyboardEvent) => {
       if (event.key.toLocaleLowerCase() === 'escape') {
         this.detail = null;

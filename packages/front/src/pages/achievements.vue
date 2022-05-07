@@ -65,8 +65,7 @@ export default defineComponent({
     return { ...data, tasks, chart };
   },
   async mounted() {
-    const result = await this.$api.getTasks();
-    this.tasks = result.data;
+    this.tasks = await this.$api.getTasks();
     this.setChartData();
   },
   methods: {

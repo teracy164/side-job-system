@@ -29,8 +29,7 @@ export default defineComponent({
     return data;
   },
   async mounted() {
-    const result = await this.$api.getUsers();
-    this.users = result.data;
+    this.users = await this.$api.getUsers();
   }
 });
 </script>

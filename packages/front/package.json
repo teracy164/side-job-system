@@ -6,15 +6,13 @@
     "build": "nuxi build",
     "build:prod": "npm run build",
     "start": "node .output/server/index.mjs",
-    "generate:api-client": "docker run --rm -v ${PWD}:/local openapitools/openapi-generator-cli:v5.4.0 generate -i http://host.docker.internal/api-json -o /local/src/lib/api-client -g typescript-axios"
+    "generate:api-client": "docker run --rm -v ${PWD}:/local openapitools/openapi-generator-cli:v5.4.0 generate -i http://host.docker.internal/api-json -o /local/src/lib/api-client -g typescript-fetch --additional-properties=modelPropertyNaming=camelCase,supportsES6=true,withInterfaces=true,typescriptThreePlus=true"
   },
   "devDependencies": {
     "nuxt": "npm:nuxt3@latest"
   },
   "dependencies": {
     "@fortawesome/fontawesome-free": "^6.1.1",
-    "@nestjs/serve-static": "^2.2.2",
-    "axios": "^0.27.2",
     "chart.js": "^3.7.1",
     "dayjs": "^1.11.1",
     "sass": "^1.51.0",

@@ -1,8 +1,7 @@
-.gitignore
-.npmignore
-api.ts
-base.ts
-common.ts
-configuration.ts
-git_push.sh
+apis/DefaultApi.ts
+apis/index.ts
 index.ts
+models/Task.ts
+models/User.ts
+models/index.ts
+runtime.ts
