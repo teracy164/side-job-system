@@ -18,7 +18,7 @@
   </div>
 </template>
 <script lang="ts">
-import { User } from "~~/types/user";
+import { User } from "~~/lib/api-client";
 
 definePageMeta({ layout: 'authenticated', middleware: ['auth'] });
 export default defineComponent({
@@ -29,7 +29,8 @@ export default defineComponent({
     return data;
   },
   async mounted() {
-    this.users = await this.$api.getUsers();
+    const result = await this.$api.getUsers();
+    this.users = result.data;
   }
 });
 </script>

@@ -26,8 +26,8 @@
   </div>
 </template>
 <script lang="ts">
-import { Task } from "~~/types/task";
 import TaskDetailOverlay from "~~/components/task/task-detail-overlay.vue";
+import { Task } from "~~/lib/api-client";
 
 definePageMeta({ layout: 'authenticated', middleware: ['auth'] });
 export default defineComponent({
@@ -39,7 +39,8 @@ export default defineComponent({
     return data;
   },
   async mounted() {
-    this.tasks = await this.$api.getTasks();
+    const result = await this.$api.getTasks();
+    this.tasks = result.data;
   },
   components: { TaskDetailOverlay }
 });

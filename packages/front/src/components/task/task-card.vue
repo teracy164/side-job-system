@@ -28,8 +28,8 @@
 </template>
 <script lang="ts">
 import GoogleIcon from '@/components/parts/google-icon.vue';
-import { Task } from "@/types/task";
 import { PropType } from 'vue';
+import { Task } from '~~/lib/api-client';
 
 export default defineComponent({
     props: {

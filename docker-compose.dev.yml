@@ -1,0 +1,26 @@
+version: "3"
+services:
+  shafuku-server:
+    working_dir: /develop/packages/server
+    command: "yarn dev"
+
+  shafuku-front:
+    image: node:18.1.0-alpine
+    container_name: shafuku-front
+    working_dir: /develop/packages/front
+    ports:
+      - 8080:${FRONT_PORT}
+      - 24678:24678
+    volumes:
+      - ./packages/front:/develop/packages/front
+    command: "yarn dev"
+    environment:
+      - PORT=${FRONT_PORT}
+
+  shafuku-proxy:
+    depends_on:
+      - shafuku-front
+    volumes:
+      - ./nginx/dev.conf.template:/etc/nginx/templates/default.conf.template
+    environment:
+      - FRONT_PORT=${FRONT_PORT}

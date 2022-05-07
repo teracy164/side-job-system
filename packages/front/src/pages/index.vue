@@ -33,9 +33,9 @@
   </div>
 </template>
 <script lang="ts">
-import { Task } from "~~/types/task";
 import TaskCard from "~~/components/task/task-card.vue";
 import TaskDetail from "~~/components/task/task-detail.vue";
+import { Task } from "~~/lib/api-client";
 
 definePageMeta({ layout: 'authenticated', middleware: ['auth'] });
 export default defineComponent({
@@ -48,8 +48,8 @@ export default defineComponent({
   },
   async mounted() {
     const { $api } = useNuxtApp();
-    const tasks = await $api.getTasks();
-    this.tasks = tasks.slice(0, 5)
+    const result = await $api.getTasks();
+    this.tasks = result.data.slice(0, 5)
   },
   methods: {
     showTaskDetail(event: Event, task: Task) {

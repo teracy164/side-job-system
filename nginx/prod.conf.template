@@ -1,0 +1,15 @@
+server {
+    listen ${LISTEN_PORT};
+    server_name localhost;
+
+    client_max_body_size 10M;
+
+    gzip            on;
+    gzip_types      text/plain application/xml text/css application/javascript;
+    gzip_min_length 1000;
+
+    location / {
+        proxy_redirect                      off;
+        proxy_pass http://shafuku-server:${SERVER_PORT};
+    }
+}

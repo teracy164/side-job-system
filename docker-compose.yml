@@ -1,0 +1,44 @@
+version: "3"
+services:
+  shafuku-server:
+    image: node:18.1.0-alpine
+    container_name: shafuku-server
+    working_dir: /develop
+    volumes:
+      - .:/develop
+    depends_on:
+      - shafuku-db
+    command: "npm run lerna run start:prod"
+    environment:
+      - PORT=${SERVER_PORT}
+      - NODE_ENV=${NODE_ENV}
+      - DATABASE_HOST=shafuku-db
+      - DATABASE_PORT=5432
+      - DATABASE_NAME=${DATABASE_NAME}
+      - DATABASE_USER=${DATABASE_USER}
+      - DATABASE_PASSWORD=${DATABASE_PASSWORD}
+
+  shafuku-db:
+    image: postgres:14.2-alpine
+    container_name: shafuku-db
+    ports:
+      - 5432:5432
+    volumes:
+      - .db/data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_DB=${DATABASE_NAME}
+      - POSTGRES_USER=${DATABASE_USER}
+      - POSTGRES_PASSWORD=${DATABASE_PASSWORD}
+
+  # フロントもNuxtサーバーでコンテナを立てているため、リバプロサーバーを立てて
+  # localhostでフロント／サーバー両方にアクセスできるようにする
+  shafuku-proxy:
+    image: nginx:1.21.6
+    container_name: shafuku-proxy
+    depends_on:
+      - shafuku-server
+    ports:
+      - 80:${NGINX_PORT}
+    environment:
+      - LISTEN_PORT=${NGINX_PORT}
+      - SERVER_PORT=${SERVER_PORT}

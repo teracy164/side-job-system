@@ -45,11 +45,11 @@
   </div>
 </template>
 <script lang="ts">
-import { Task } from "~~/types/task";
 import TaskDetailOverlay from "~~/components/task/task-detail-overlay.vue";
 import BarChart from "~~/components/parts/chart/bar-chart.vue";
 import TaskCard from "~~/components/task/task-card.vue";
 import { ChartData } from "chart.js";
+import { Task } from "~~/lib/api-client";
 
 definePageMeta({ layout: 'authenticated', middleware: ['auth'] });
 export default defineComponent({
@@ -65,7 +65,8 @@ export default defineComponent({
     return { ...data, tasks, chart };
   },
   async mounted() {
-    this.tasks = await this.$api.getTasks();
+    const result = await this.$api.getTasks();
+    this.tasks = result.data;
     this.setChartData();
   },
   methods: {

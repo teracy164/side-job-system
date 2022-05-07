@@ -28,8 +28,8 @@
 import TaskCard from '@/components/task/task-card.vue';
 import TaskDetail from '@/components/task/task-detail.vue';
 import GoogleIcon from '@/components/parts/google-icon.vue';
-import { Task } from '@/types/task';
 import TaskDetailOverlay from '~~/components/task/task-detail-overlay.vue';
+import { Task } from '~~/lib/api-client';
 
 definePageMeta({ layout: 'authenticated', middleware: ['auth'] });
 export default defineComponent({
@@ -40,7 +40,8 @@ export default defineComponent({
   },
   async mounted() {
     const { $api } = useNuxtApp();
-    this.tasks = await $api.getTasks();
+    const result = await $api.getTasks();
+    this.tasks = result.data;
     document.addEventListener('keyup', (event: KeyboardEvent) => {
       if (event.key.toLocaleLowerCase() === 'escape') {
         this.detail = null;
@@ -48,10 +49,6 @@ export default defineComponent({
     })
   },
   methods: {
-    searchTasks() {
-      const { $api } = useNuxtApp();
-      return $api.getTasks();
-    },
     showDetail(event: Event, task: Task) {
       this.detail = task;
     },
