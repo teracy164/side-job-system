@@ -606,7 +606,7 @@
     "webpack" "5.71.0"
     "webpack-node-externals" "3.0.0"
 
-"@nestjs/common@^7.0.8 || ^8.0.0", "@nestjs/common@^8.0.0":
+"@nestjs/common@^6.0.0 || ^7.0.0 || ^8.0.0", "@nestjs/common@^7.0.8 || ^8.0.0", "@nestjs/common@^8.0.0":
   "integrity" "sha512-QHi7QcgH/5Jinz+SCfIZJkFHc6Cch1YsAEGFEhi6wSp6MILb0sJMQ1CX06e9tCOAjSlBwaJj4PH0eFCVau5v9Q=="
   "resolved" "https://registry.npmjs.org/@nestjs/common/-/common-8.4.4.tgz"
   "version" "8.4.4"
@@ -616,7 +616,7 @@
     "tslib" "2.3.1"
     "uuid" "8.3.2"
 
-"@nestjs/core@^8.0.0":
+"@nestjs/core@^6.0.0 || ^7.0.0 || ^8.0.0", "@nestjs/core@^8.0.0":
   "integrity" "sha512-Ef3yJPuzAttpNfehnGqIV5kHIL9SHptB5F4ERxoU7pT61H3xiYpZw6hSjx68cJO7cc6rm7/N+b4zeuJvFHtvBg=="
   "resolved" "https://registry.npmjs.org/@nestjs/core/-/core-8.4.4.tgz"
   "version" "8.4.4"
@@ -662,6 +662,13 @@
   "version" "8.0.0"
   dependencies:
     "uuid" "8.3.2"
+
+"@nestjs/serve-static@^2.2.2":
+  "integrity" "sha512-3Mr+Q/npS3N7iGoF3Wd6Lj9QcjMGxbNrSqupi5cviM0IKrZ1BHl5qekW95rWYNATAVqoTmjGROAq+nKKpuUagQ=="
+  "resolved" "https://registry.npmjs.org/@nestjs/serve-static/-/serve-static-2.2.2.tgz"
+  "version" "2.2.2"
+  dependencies:
+    "path-to-regexp" "0.1.7"
 
 "@nestjs/swagger@^5.2.1":
   "integrity" "sha512-7dNa08WCnTsW/oAk3Ujde+z64JMfNm19DhpXasFR8oJp/9pggYAbYU927HpA+GJsSFJX6adjIRZsCKUqaGWznw=="

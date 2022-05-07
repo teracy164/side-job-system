@@ -1,9 +1,15 @@
 import { Module } from '@nestjs/common';
 import { ApiModule } from './api/api.module';
+import { ServeStaticModule } from '@nestjs/serve-static';
+import { join } from 'path';
 import { SequelizeModule } from '@nestjs/sequelize';
 
 @Module({
   imports: [
+    ServeStaticModule.forRoot({
+      rootPath: join(__dirname, '..', 'front/dist'),
+      exclude: ['/api/*'],
+    }),
     SequelizeModule.forRoot({
       dialect: 'postgres',
       host: process.env.DATABASE_HOST || 'localhost',
