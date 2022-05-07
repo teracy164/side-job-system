@@ -3,6 +3,7 @@
   "scripts": {
     "dev": "nuxi dev",
     "build": "nuxi build",
+    "build:prod": "npm run build",
     "start": "node .output/server/index.mjs",
     "generate:api-client": "docker run --rm -v ${PWD}:/local openapitools/openapi-generator-cli:v5.4.0 generate -i http://host.docker.internal/api-json -o /local/src/lib/api-client -g typescript-axios"
   },
