@@ -1,6 +1,8 @@
 <template>
-    <Dialog :visible="visible" @onclose="onclose">
-        <template v-slot:header>編集</template>
+    <Dialog :visible="visible" @update:visible="onclose">
+        <template v-slot:header>
+            <h1>{{ isEdit() ? '編集' : '追加' }}</h1>
+        </template>
         <div @click.stop="">
             <div class="form-item">
                 <label>タイトル</label>
@@ -77,7 +79,7 @@ export default defineComponent({
     },
     methods: {
         isEdit() {
-            return !!this.task.id;
+            return !!this.task?.id;
         },
         async save() {
             if (!this.editData) {
@@ -91,17 +93,21 @@ export default defineComponent({
             } else {
                 result = await this.$api.addTask({ task: this.editData });
             }
-            this.$emit('update', result);
+            this.$emit('update:task', result);
         },
         cancel() {
-            this.onclose();
+            this.onclose(false);
         },
-        onclose() {
-            this.$emit('onclose');
+        onclose(closed: boolean) {
+            this.$emit('update:visible', closed);
         }
     },
     components: { GoogleIcon, Dialog },
 });
 </script>
 <style lang="scss" scoped>
+h1 {
+    margin: 0;
+    font-size: 1.3em;
+}
 </style>

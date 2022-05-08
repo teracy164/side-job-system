@@ -11,6 +11,7 @@ export class TasksService {
   }
 
   add(dto: Partial<Task>) {
+    delete dto.id;
     return this.model.create(dto);
   }
 

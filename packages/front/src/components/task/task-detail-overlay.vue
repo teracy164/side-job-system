@@ -1,5 +1,5 @@
 <template>
-    <Dialog :visible="visibleDialog">
+    <Dialog :visible="visible" @update:visible="close">
         <template v-slot:header>
             <h1> {{ task.title }} </h1>
             <div style="font-size: 0.8em">
@@ -46,18 +46,19 @@
         </div>
         <template v-slot:footer>
             <div>
-                <button class="primary">仕事を受ける</button>
-                <button class="danger">仕事をキャンセル</button>
+                <template v-if="acceptable">
+                    <button v-if="accepted" class="danger">仕事をキャンセル</button>
+                    <button v-else class="primary">仕事を受ける</button>
+                </template>
             </div>
             <div>
-                <template v-if="editable">
-                    <button class="primary" @click="edit">編集</button>
-                    <TaskEditOverlay v-if="visibleEditDialog" :visible="visibleEditDialog" :task="task"
-                        @update="updateTask" @onclose="oncloseEditDialog" />
-                </template>
+                <button @click="close">閉じる</button>
+                <button v-if="editable" class="primary" @click="edit">編集</button>
             </div>
         </template>
     </Dialog>
+    <TaskEditOverlay v-if="visible && editable" :visible="visibleEditDialog" :task="task" @update:task="updateTask"
+        @update:visible="oncloseEditDialog" />
 </template>
 <script lang="ts">
 import GoogleIcon from '@/components/parts/google-icon.vue';
@@ -71,6 +72,7 @@ export default defineComponent({
         visible: {
             required: true,
             type: Boolean,
+
         },
         task: {
             required: true,
@@ -83,7 +85,7 @@ export default defineComponent({
         }
     },
     setup(props, context) {
-        const data = reactive({ visibleDialog: props.visible, visibleEditDialog: false });
+        const data = reactive({ visibleDialog: props.visible, visibleEditDialog: false, acceptable: false, accepted: false });
         return data;
     },
     methods: {
@@ -91,14 +93,23 @@ export default defineComponent({
             return this.task.tags.split(',');
         },
         edit() {
+            // 詳細ダイアログを閉じて、編集ダイアログを表示
+            this.visibleDialog = false;
             this.visibleEditDialog = true;
         },
         updateTask(task: Task) {
             this.visibleEditDialog = false;
-            this.$emit('update', task);
+            this.visibleDialog = false;
+            this.$emit('update:task', task);
+            this.$emit('update:visible', false)
         },
         oncloseEditDialog() {
+            // 編集ダイアログを閉じて、詳細ダイアログを再表示
             this.visibleEditDialog = false;
+            this.visibleDialog = true;
+        },
+        close() {
+            this.$emit('update:visible', false)
         }
     },
     components: { GoogleIcon, Dialog, TaskEditOverlay },

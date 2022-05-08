@@ -6,7 +6,7 @@
         <div class="wrapper">
           <TaskCard v-for="task of tasks" :task="task" @onclick="showTaskDetail" />
         </div>
-        <TaskDetailOverlay v-if="detail" :visible="!!detail" :task="detail" @onclose="detail = null" />
+        <TaskDetailOverlay v-if="detail" :visible="!!detail" :task="detail" @update:visible="detail = null" />
       </div>
     </div>
     <div style="display: flex; justify-content: ;">

@@ -21,7 +21,7 @@
     <div class="tasks">
       <TaskCard v-for="task of tasks" :task="task" @onclick="this.detail = task" />
     </div>
-    <TaskDetailOverlay v-if="detail" :visible="!!detail" :task="detail" @onclose="detail = null" />
+    <TaskDetailOverlay v-if="detail" :visible="!!detail" :task="detail" @update:visible="detail = null" />
   </div>
 </template>
 <script lang="ts">

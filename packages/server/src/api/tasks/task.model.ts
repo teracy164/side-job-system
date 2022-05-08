@@ -15,6 +15,7 @@ import { TaskAssign } from './task_assign.model';
 
 @DefaultScope(() => ({
   include: [User],
+  order: ['id'],
 }))
 @Table({
   tableName: 'tasks',
@@ -23,7 +24,7 @@ import { TaskAssign } from './task_assign.model';
 })
 export class Task extends Model {
   @ApiPropertyOptional()
-  @Column({ primaryKey: true })
+  @Column({ primaryKey: true, autoIncrement: true })
   id: number;
 
   @ApiProperty()

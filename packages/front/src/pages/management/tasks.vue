@@ -1,7 +1,9 @@
 <template>
   <div>
-
-    <h4>発行済みの仕事<button class="primary" style="margin-left: 20px" @click="addTask">追加</button></h4>
+    <h4>
+      発行済みの仕事
+      <button class="primary" style="margin-left: 20px" @click="addTask">追加</button>
+    </h4>
     <table class="row-clickable">
       <thead>
         <tr>
@@ -22,8 +24,9 @@
         </tr>
       </tbody>
     </table>
-    <TaskDetailOverlay v-if="detail" :visible="visibleDialog" :task="detail" :editable="true"
-      @onclose="detail = null" />
+    <TaskEditOverlay v-if="visibleAddDialog" v-model:visible="visibleAddDialog" @update:task="onupdate" />
+    <TaskDetailOverlay v-if="detail" v-model:visible="visibleDialog" :task="detail" :editable="true"
+      @update:task="onupdate" />
   </div>
 </template>
 <script lang="ts">
@@ -37,21 +40,33 @@ export default defineComponent({
       tasks: Task[];
       detail: Task | null;
       visibleDialog: boolean;
-    }>({ tasks: [], detail: null, visibleDialog: false });
+      visibleAddDialog: boolean;
+    }>({ tasks: [], detail: null, visibleDialog: false, visibleAddDialog: false });
     return data;
   },
   async mounted() {
-    this.tasks = await this.$api.getTasks();
+    this.loadTasks();
   },
   methods: {
+    async loadTasks() {
+      this.tasks = await this.$api.getTasks();
+    },
     editTask(task: Task) {
       this.detail = task;
       this.visibleDialog = true;
     },
     addTask() {
-      console.log('add task')
       this.detail = null;
-      this.visibleDialog = true;
+      this.visibleAddDialog = true;
+    },
+    onupdate(task: Task) {
+      this.loadTasks();
+      this.oncloseDialog();
+    },
+    oncloseDialog() {
+      this.visibleDialog = false;
+      this.visibleAddDialog = false;
+      this.detail = null;
     }
   },
   components: { TaskDetailOverlay }

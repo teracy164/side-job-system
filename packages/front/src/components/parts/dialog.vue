@@ -52,9 +52,9 @@ export default defineComponent({
         return { onclose, isShow }
     },
     mounted() {
-        document.addEventListener('keyup', e => {
+        document.addEventListener('keyup', (e) => {
             if (e.key.toLocaleLowerCase() === 'escape') {
-                this.close(e);
+                this.close();
             }
         })
     },
@@ -62,13 +62,13 @@ export default defineComponent({
         show() {
             this.isShow = true;
         },
-        close(event: Event) {
+        close() {
             this.isShow = false;
-            this.$emit('onclose', event);
+            this.$emit('update:visible', false);
         },
-        clickOutside(event: Event) {
+        clickOutside() {
             if (this.closeOnOutside) {
-                this.close(event);
+                this.close();
             }
         }
     },
