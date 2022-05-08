@@ -3,7 +3,7 @@
         <template v-slot:header>
             <h1>{{ isEdit() ? '編集' : '追加' }}</h1>
         </template>
-        <div @click.stop="">
+        <div>
             <div class="form-item">
                 <label>タイトル</label>
                 <input v-model="editData.title">

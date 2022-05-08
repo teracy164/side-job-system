@@ -13,7 +13,7 @@
                 </div>
             </div>
         </template>
-        <div @click.stop="">
+        <div>
             <h4><label>概要</label></h4>
             <div class="content">
                 <pre>{{ task.description }}</pre>
