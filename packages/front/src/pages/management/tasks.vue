@@ -1,7 +1,7 @@
 <template>
   <div>
 
-    <h4>発行済みの仕事<button style="margin-left: 20px">追加</button></h4>
+    <h4>発行済みの仕事<button class="primary" style="margin-left: 20px" @click="addTask">追加</button></h4>
     <table class="row-clickable">
       <thead>
         <tr>
@@ -13,7 +13,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="task of tasks" @click="detail = task">
+        <tr v-for="task of tasks" @click="editTask(task)">
           <td>{{ task.title }}</td>
           <td>{{ $currency(task.price) }}</td>
           <td>{{ $dateFormat(task.expireDate) }}</td>
@@ -22,7 +22,8 @@
         </tr>
       </tbody>
     </table>
-    <TaskDetailOverlay v-if="detail" :task="detail" @onclose="detail = null" />
+    <TaskDetailOverlay v-if="detail" :visible="visibleDialog" :task="detail" :editable="true"
+      @onclose="detail = null" />
   </div>
 </template>
 <script lang="ts">
@@ -35,11 +36,23 @@ export default defineComponent({
     const data = reactive<{
       tasks: Task[];
       detail: Task | null;
-    }>({ tasks: [], detail: null });
+      visibleDialog: boolean;
+    }>({ tasks: [], detail: null, visibleDialog: false });
     return data;
   },
   async mounted() {
     this.tasks = await this.$api.getTasks();
+  },
+  methods: {
+    editTask(task: Task) {
+      this.detail = task;
+      this.visibleDialog = true;
+    },
+    addTask() {
+      console.log('add task')
+      this.detail = null;
+      this.visibleDialog = true;
+    }
   },
   components: { TaskDetailOverlay }
 });

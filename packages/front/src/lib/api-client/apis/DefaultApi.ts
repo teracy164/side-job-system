@@ -23,6 +23,15 @@ import {
     UserToJSON,
 } from '../models';
 
+export interface AddTaskRequest {
+    task: Task;
+}
+
+export interface UpdateTaskRequest {
+    id: number;
+    task: Task;
+}
+
 /**
  * DefaultApi - interface
  * 
@@ -30,6 +39,19 @@ import {
  * @interface DefaultApiInterface
  */
 export interface DefaultApiInterface {
+    /**
+     * 
+     * @param {Task} task 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DefaultApiInterface
+     */
+    addTaskRaw(requestParameters: AddTaskRequest, initOverrides?: RequestInit): Promise<runtime.ApiResponse<Task>>;
+
+    /**
+     */
+    addTask(requestParameters: AddTaskRequest, initOverrides?: RequestInit): Promise<Task>;
+
     /**
      * 
      * @param {*} [options] Override http request option.
@@ -54,12 +76,57 @@ export interface DefaultApiInterface {
      */
     getUsers(initOverrides?: RequestInit): Promise<Array<User>>;
 
+    /**
+     * 
+     * @param {number} id 
+     * @param {Task} task 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DefaultApiInterface
+     */
+    updateTaskRaw(requestParameters: UpdateTaskRequest, initOverrides?: RequestInit): Promise<runtime.ApiResponse<Task>>;
+
+    /**
+     */
+    updateTask(requestParameters: UpdateTaskRequest, initOverrides?: RequestInit): Promise<Task>;
+
 }
 
 /**
  * 
  */
 export class DefaultApi extends runtime.BaseAPI implements DefaultApiInterface {
+
+    /**
+     */
+    async addTaskRaw(requestParameters: AddTaskRequest, initOverrides?: RequestInit): Promise<runtime.ApiResponse<Task>> {
+        if (requestParameters.task === null || requestParameters.task === undefined) {
+            throw new runtime.RequiredError('task','Required parameter requestParameters.task was null or undefined when calling addTask.');
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        const response = await this.request({
+            path: `/api/tasks`,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: TaskToJSON(requestParameters.task),
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => TaskFromJSON(jsonValue));
+    }
+
+    /**
+     */
+    async addTask(requestParameters: AddTaskRequest, initOverrides?: RequestInit): Promise<Task> {
+        const response = await this.addTaskRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
 
     /**
      */
@@ -106,6 +173,41 @@ export class DefaultApi extends runtime.BaseAPI implements DefaultApiInterface {
      */
     async getUsers(initOverrides?: RequestInit): Promise<Array<User>> {
         const response = await this.getUsersRaw(initOverrides);
+        return await response.value();
+    }
+
+    /**
+     */
+    async updateTaskRaw(requestParameters: UpdateTaskRequest, initOverrides?: RequestInit): Promise<runtime.ApiResponse<Task>> {
+        if (requestParameters.id === null || requestParameters.id === undefined) {
+            throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling updateTask.');
+        }
+
+        if (requestParameters.task === null || requestParameters.task === undefined) {
+            throw new runtime.RequiredError('task','Required parameter requestParameters.task was null or undefined when calling updateTask.');
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        const response = await this.request({
+            path: `/api/tasks/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))),
+            method: 'PATCH',
+            headers: headerParameters,
+            query: queryParameters,
+            body: TaskToJSON(requestParameters.task),
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => TaskFromJSON(jsonValue));
+    }
+
+    /**
+     */
+    async updateTask(requestParameters: UpdateTaskRequest, initOverrides?: RequestInit): Promise<Task> {
+        const response = await this.updateTaskRaw(requestParameters, initOverrides);
         return await response.value();
     }
 

@@ -35,11 +35,14 @@ body {
   background-color: white;
   border-radius: 5px;
   border: 1px solid #f0f0f0;
-  box-shadow: 3px 3px 3px lightgray;
-  padding: 10px;
+  padding: 15px;
+
+  &.shadow {
+    box-shadow: 3px 3px 3px lightgray;
+  }
 
   .header {
-    font-size: 1.3em;
+    padding-bottom: 10px;
     border-bottom: 1px solid #e0e0e0;
   }
 
@@ -85,7 +88,7 @@ pre {
 }
 
 button {
-  background-color: #9999ff;
+  background-color: #c9c9c9;
   color: white;
   border: 0;
   border-radius: 3px;
@@ -102,6 +105,10 @@ button:active {
   transform: translateX(1px) translateY(1px);
 }
 
+button:disabled {
+  opacity: 0.8;
+}
+
 button.icon-btn {
   background-color: rgba(0, 0, 0, 0);
   color: black;
@@ -112,6 +119,10 @@ button.icon-btn {
   i {
     line-height: 1em;
   }
+}
+
+button + button {
+  margin-left: 10px;
 }
 
 input {
@@ -128,6 +139,29 @@ input:active {
   border: 1px solid #efefff;
 }
 input:focus {
+  border: 1px solid #aaaaff;
+}
+input[type='date'] {
+  font: inherit;
+  font-size: 0.8em;
+}
+
+textarea {
+  border: 1px solid lightgray;
+  border-radius: 3px;
+  padding: 5px 10px;
+  width: calc(100% - 20px);
+  outline: none;
+  font: inherit;
+  font-size: 0.8em;
+}
+textarea:hover {
+  background-color: #f9f9f9;
+}
+textarea:active {
+  border: 1px solid #efefff;
+}
+textarea:focus {
   border: 1px solid #aaaaff;
 }
 

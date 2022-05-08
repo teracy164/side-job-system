@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { Task } from './task.model';
 
@@ -8,5 +8,18 @@ export class TasksService {
 
   getTasks() {
     return this.model.findAll();
+  }
+
+  add(dto: Partial<Task>) {
+    return this.model.create(dto);
+  }
+
+  async update(id: number, dto: Partial<Task>) {
+    const target = await this.model.findOne({ where: { id } });
+    if (target) {
+      Object.assign(target, dto);
+      return target.save();
+    }
+    throw new BadRequestException();
   }
 }

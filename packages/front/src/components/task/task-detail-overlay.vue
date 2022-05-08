@@ -1,85 +1,141 @@
 <template>
-    <div class="detail-panel" @click="onclose($event, task)">
-        <div class="wrapper">
-            <div class="btn-area">
-                <button class="btn-close icon-btn" @click.stop="onclose($event, task)">
-                    <GoogleIcon icon="close" />
-                </button>
+    <Dialog :visible="visibleDialog">
+        <template v-slot:header>
+            <h1> {{ task.title }} </h1>
+            <div style="font-size: 0.8em">
+                <div class="v-center">
+                    <div class="mr-10 ">依頼者：{{ task.client }}</div>
+                    <div class="mr-10 ">作成日：{{ $dateFormat(task.createdAt) }}</div>
+                    <div class="mr-10 ">作成者：{{ task.createUserId }}</div>
+                </div>
+                <div class="tags">
+                    <div v-for="tag of tags()" class="tag">{{ tag }}</div>
+                </div>
+            </div>
+        </template>
+        <div @click.stop="">
+            <h4><label>概要</label></h4>
+            <div class="content">
+                <pre>{{ task.description }}</pre>
             </div>
 
-            <div class="task" @click.stop="">
-                <div class="task-wrapper">
-                    <TaskDetail :task="task" />
+            <h4><label>条件等</label></h4>
+            <div class="content" style="display: flex; flex-wrap: wrap">
+                <div style="flex-basis: 30%"><label>報酬</label></div>
+                <div style="flex-basis: 70%">{{ $currency(task.price) }}</div>
+                <div style="flex-basis: 30%"><label>期限</label></div>
+                <div style="flex-basis: 70%">{{ $dateFormat(task.expireDate) }}</div>
+                <div style="flex-basis: 30%"><label>備考</label></div>
+                <div style="flex-basis: 70%">
+                    <pre>{{ task.note }}</pre>
+                </div>
+            </div>
+
+            <h4><label>募集状況</label></h4>
+            <div class="content" style="display: flex; flex-wrap: wrap">
+                <div style="flex-basis: 30%"><label>募集人数</label></div>
+                <div style="flex-basis: 70%">{{ task.recruitmentNumber }}</div>
+                <div style="flex-basis: 30%"><label>仕事を受けた人</label></div>
+                <div style="flex-basis: 70%">
+                    <div v-if="task.assigners?.length" v-for="assigner of task.assigners">
+                        {{ assigner.name }}
+                    </div>
+                    <div v-else>なし</div>
                 </div>
             </div>
         </div>
-    </div>
+        <template v-slot:footer>
+            <div>
+                <button class="primary">仕事を受ける</button>
+                <button class="danger">仕事をキャンセル</button>
+            </div>
+            <div>
+                <template v-if="editable">
+                    <button class="primary" @click="edit">編集</button>
+                    <TaskEditOverlay v-if="visibleEditDialog" :visible="visibleEditDialog" :task="task"
+                        @update="updateTask" @onclose="oncloseEditDialog" />
+                </template>
+            </div>
+        </template>
+    </Dialog>
 </template>
 <script lang="ts">
 import GoogleIcon from '@/components/parts/google-icon.vue';
 import { PropType } from 'vue';
 import { Task } from '~~/lib/api-client';
+import Dialog from '../parts/dialog.vue';
+import TaskEditOverlay from './task-edit-overlay.vue';
 
 export default defineComponent({
     props: {
+        visible: {
+            required: true,
+            type: Boolean,
+        },
         task: {
             required: true,
             type: Object as PropType<Task>,
+        },
+        editable: {
+            required: false,
+            type: Boolean,
+            default: false,
         }
     },
     setup(props, context) {
-        const onclose = (event: Event, task: Task) => context.emit('onclose', event, task);
-        document.addEventListener('keyup', e => {
-            if (e.key.toLocaleLowerCase() === 'escape') {
-                onclose(e, props.task);
-            }
-        })
-        return { onclose }
+        const data = reactive({ visibleDialog: props.visible, visibleEditDialog: false });
+        return data;
     },
-    components: { GoogleIcon },
+    methods: {
+        tags() {
+            return this.task.tags.split(',');
+        },
+        edit() {
+            this.visibleEditDialog = true;
+        },
+        updateTask(task: Task) {
+            this.visibleEditDialog = false;
+            this.$emit('update', task);
+        },
+        oncloseEditDialog() {
+            this.visibleEditDialog = false;
+        }
+    },
+    components: { GoogleIcon, Dialog, TaskEditOverlay },
 });
 </script>
 <style lang="scss" scoped>
-.detail-panel {
-    position: fixed;
-    top: 0;
-    left: 0;
-    z-index: 1000;
-    width: 100vw;
-    height: 100vh;
-    overflow: auto;
-    background-color: rgb(0, 0, 0, 0.7);
-    display: flex;
-    justify-content: center;
+.card {
+    box-shadow: unset !important;
+}
 
-    .wrapper {
-        padding: 20px;
+h1 {
+    margin: 0;
+    font-size: 1.5em;
+}
 
-        .btn-area {
-            width: 100%;
-            text-align: right;
+h4 {
+    margin-bottom: 0;
 
-            .btn-close {
-                color: white;
-            }
-
-            .btn-close:hover {
-                background-color: rgba(100, 100, 100, 0.7);
-            }
-        }
-
-        .task {
-            width: 800px;
-            max-width: 95vw;
-
-            .task-wrapper {
-                background-color: white;
-                border-radius: 5px;
-                padding: 20px;
-
-            }
-        }
-
+    label {
+        border-bottom: 1px solid black;
     }
+}
+
+.tags {
+    display: flex;
+    flex-wrap: wrap;
+
+    .tag {
+        background-color: #9999ff;
+        border-radius: 20px;
+        padding: 0px 10px;
+        margin-right: 3px;
+        color: white;
+    }
+}
+
+.content {
+    padding: 5px 10px;
 }
 </style>

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <button>追加</button>
+    <button class="primary">追加</button>
     <table>
       <thead>
         <tr>

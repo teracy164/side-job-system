@@ -1,5 +1,5 @@
 <template>
-    <div class="card task" @click="onclick($event, task)">
+    <div class="card shadow task" @click="onclick($event, task)">
         <div class="header">
             <p class="title" :title="task.title">{{ task.title }}</p>
             <div style="display:flex; align-items: center; font-size: 0.7rem;">

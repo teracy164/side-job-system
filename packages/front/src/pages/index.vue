@@ -6,7 +6,7 @@
         <div class="wrapper">
           <TaskCard v-for="task of tasks" :task="task" @onclick="showTaskDetail" />
         </div>
-        <TaskDetailOverlay v-if="detail" :task="detail" @onclose="detail = null" />
+        <TaskDetailOverlay v-if="detail" :visible="!!detail" :task="detail" @onclose="detail = null" />
       </div>
     </div>
     <div style="display: flex; justify-content: ;">
@@ -34,8 +34,8 @@
 </template>
 <script lang="ts">
 import TaskCard from "~~/components/task/task-card.vue";
-import TaskDetail from "~~/components/task/task-detail.vue";
 import { Task } from "~~/lib/api-client";
+import TaskDetailOverlay from "~~/components/task/task-detail-overlay.vue";
 
 definePageMeta({ layout: 'authenticated', middleware: ['auth'] });
 export default defineComponent({
@@ -59,7 +59,7 @@ export default defineComponent({
       navigateTo(path);
     },
   },
-  components: { TaskCard, TaskDetail }
+  components: { TaskCard, TaskDetailOverlay }
 });
 </script>
 <style lang="scss" scoped>
