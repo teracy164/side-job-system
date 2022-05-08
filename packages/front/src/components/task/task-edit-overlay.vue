@@ -29,6 +29,10 @@
                 <input type="date" style="width: 150px" v-model="editData.expireDate">
             </div>
             <div class="form-item">
+                <label>募集人数</label>
+                <input type="number" style="width: 50px" v-model="editData.recruitmentNumber" min="1">人
+            </div>
+            <div class="form-item">
                 <label>備考</label>
                 <textarea v-model="editData.note"></textarea>
             </div>
@@ -44,6 +48,7 @@
 </template>
 <script lang="ts">
 import GoogleIcon from '@/components/parts/google-icon.vue';
+import dayjs from 'dayjs';
 import { PropType } from 'vue';
 import { Task } from '~~/lib/api-client';
 import Dialog from '../parts/dialog.vue';
@@ -67,7 +72,7 @@ export default defineComponent({
             client: '',
             expireDate: '',
             price: 0,
-            recruitmentNumber: 0,
+            recruitmentNumber: 1,
             tags: '',
             note: '',
         };
