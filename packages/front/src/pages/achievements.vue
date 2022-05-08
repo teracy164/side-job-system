@@ -40,7 +40,7 @@
           </tbody>
         </table>
       </div>
-      <TaskDetailOverlay v-if="detail" :visible="!!detail" :task="detail" @onclose="hiddenDetail()" />
+      <TaskDetailOverlay v-if="detail" :visible="!!detail" :task="detail" @update:visible="hiddenDetail()" />
     </div>
   </div>
 </template>
