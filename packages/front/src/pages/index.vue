@@ -49,7 +49,7 @@ export default defineComponent({
   async mounted() {
     const { $api } = useNuxtApp();
     const tasks = await $api.getTasks();
-    this.tasks = tasks.slice(0, 5)
+    this.tasks = tasks.slice(0, 10)
   },
   methods: {
     showTaskDetail(event: Event, task: Task) {
