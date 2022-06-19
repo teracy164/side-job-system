@@ -66,7 +66,7 @@ header {
     z-index: 10;
     width: 100%;
     height: $headerHeight;
-    background-color: rgba(200, 200, 255, 0.2);
+    background-color: rgba(230, 230, 255, 0.2);
 
     .wrapper {
         height: 100%;
@@ -86,6 +86,7 @@ header {
     flex-direction: column;
     justify-content: center;
     padding: 0px 5px;
+    text-align: center;
 
     .s,
     .f {
