@@ -10,6 +10,8 @@ services:
     working_dir: /develop/packages/front
     ports:
       - 8080:${FRONT_PORT}
+      # 無限リロード対策
+      # https://qiita.com/inumberx/items/a29640675c0fc5e5916a
       - 24678:24678
     volumes:
       - ./packages/front:/develop/packages/front
