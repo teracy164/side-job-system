@@ -2,11 +2,11 @@
   <div class="container center h100">
     <div class="card" style="width: 300px; max-width: 95%;">
       <div class="form-item">
-        <label for="username">username</label>
-        <input v-model="form.username" id="username" />
+        <label for="loginId">Login ID</label>
+        <input v-model="form.loginId" id="loginId" />
       </div>
       <div class="form-item">
-        <label for="password">password</label>
+        <label for="password">Password</label>
         <input type="password" v-model="form.password" id="password" />
       </div>
       <div style="margin-top: 20px; text-align: right">
@@ -16,25 +16,26 @@
   </div>
 </template>
 <script lang="ts">
-interface Form { username: string; password: string; }
+interface Form { loginId: string; password: string; }
 export default defineComponent({
   setup(props, context) {
     const form = reactive<Form>({
-      username: '',
+      loginId: '',
       password: ''
     });
 
-    const login = async () => {
-      const { $auth } = useNuxtApp();
-      await $auth.login();
-      console.log("login", form.username);
-      await navigateTo({ path: '/' });
-    };
-
-    return {
-      form,
-      login,
-    };
+    return { form };
   },
+  methods: {
+    async login() {
+      try {
+        await this.$auth.login(this.form);
+        await navigateTo({ path: '/' });
+      } catch (err) {
+        console.error('login failed', err);
+        alert('ログインに失敗しました');
+      }
+    }
+  }
 });
 </script>

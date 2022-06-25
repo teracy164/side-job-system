@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
-import { User } from './user.model';
+import { Scope, User } from './user.model';
 
 @Injectable()
 export class UsersService {
@@ -8,5 +8,9 @@ export class UsersService {
 
   getUsers() {
     return this.model.findAll();
+  }
+
+  getUserForAuth(loginId: string) {
+    return this.model.scope(Scope.AUTH).findOne({ where: { loginId } });
   }
 }

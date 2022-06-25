@@ -10,6 +10,10 @@ export class TasksService {
     return this.model.findAll();
   }
 
+  searchTasks(userId: number) {
+    return this.model.findAll({ where: { '$assigners.id$': userId } });
+  }
+
   add(dto: Partial<Task>) {
     delete dto.id;
     return this.model.create(dto);

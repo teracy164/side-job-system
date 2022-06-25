@@ -15,6 +15,12 @@
 
 import * as runtime from '../runtime';
 import {
+    AuthorityGroup,
+    AuthorityGroupFromJSON,
+    AuthorityGroupToJSON,
+    LoginDto,
+    LoginDtoFromJSON,
+    LoginDtoToJSON,
     Task,
     TaskFromJSON,
     TaskToJSON,
@@ -25,6 +31,10 @@ import {
 
 export interface AddTaskRequest {
     task: Task;
+}
+
+export interface LoginRequest {
+    loginDto: LoginDto;
 }
 
 export interface UpdateTaskRequest {
@@ -58,6 +68,30 @@ export interface DefaultApiInterface {
      * @throws {RequiredError}
      * @memberof DefaultApiInterface
      */
+    getAuthorityGroupsRaw(initOverrides?: RequestInit): Promise<runtime.ApiResponse<Array<AuthorityGroup>>>;
+
+    /**
+     */
+    getAuthorityGroups(initOverrides?: RequestInit): Promise<Array<AuthorityGroup>>;
+
+    /**
+     * 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DefaultApiInterface
+     */
+    getMyTasksRaw(initOverrides?: RequestInit): Promise<runtime.ApiResponse<Array<Task>>>;
+
+    /**
+     */
+    getMyTasks(initOverrides?: RequestInit): Promise<Array<Task>>;
+
+    /**
+     * 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DefaultApiInterface
+     */
     getTasksRaw(initOverrides?: RequestInit): Promise<runtime.ApiResponse<Array<Task>>>;
 
     /**
@@ -75,6 +109,19 @@ export interface DefaultApiInterface {
     /**
      */
     getUsers(initOverrides?: RequestInit): Promise<Array<User>>;
+
+    /**
+     * 
+     * @param {LoginDto} loginDto 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DefaultApiInterface
+     */
+    loginRaw(requestParameters: LoginRequest, initOverrides?: RequestInit): Promise<runtime.ApiResponse<string>>;
+
+    /**
+     */
+    login(requestParameters: LoginRequest, initOverrides?: RequestInit): Promise<string>;
 
     /**
      * 
@@ -110,6 +157,14 @@ export class DefaultApi extends runtime.BaseAPI implements DefaultApiInterface {
 
         headerParameters['Content-Type'] = 'application/json';
 
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
         const response = await this.request({
             path: `/api/tasks`,
             method: 'POST',
@@ -130,11 +185,75 @@ export class DefaultApi extends runtime.BaseAPI implements DefaultApiInterface {
 
     /**
      */
+    async getAuthorityGroupsRaw(initOverrides?: RequestInit): Promise<runtime.ApiResponse<Array<AuthorityGroup>>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        const response = await this.request({
+            path: `/api/authorities`,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(AuthorityGroupFromJSON));
+    }
+
+    /**
+     */
+    async getAuthorityGroups(initOverrides?: RequestInit): Promise<Array<AuthorityGroup>> {
+        const response = await this.getAuthorityGroupsRaw(initOverrides);
+        return await response.value();
+    }
+
+    /**
+     */
+    async getMyTasksRaw(initOverrides?: RequestInit): Promise<runtime.ApiResponse<Array<Task>>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+        const response = await this.request({
+            path: `/api/tasks/mine`,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(TaskFromJSON));
+    }
+
+    /**
+     */
+    async getMyTasks(initOverrides?: RequestInit): Promise<Array<Task>> {
+        const response = await this.getMyTasksRaw(initOverrides);
+        return await response.value();
+    }
+
+    /**
+     */
     async getTasksRaw(initOverrides?: RequestInit): Promise<runtime.ApiResponse<Array<Task>>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
 
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
         const response = await this.request({
             path: `/api/tasks`,
             method: 'GET',
@@ -159,6 +278,14 @@ export class DefaultApi extends runtime.BaseAPI implements DefaultApiInterface {
 
         const headerParameters: runtime.HTTPHeaders = {};
 
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
         const response = await this.request({
             path: `/api/users`,
             method: 'GET',
@@ -173,6 +300,37 @@ export class DefaultApi extends runtime.BaseAPI implements DefaultApiInterface {
      */
     async getUsers(initOverrides?: RequestInit): Promise<Array<User>> {
         const response = await this.getUsersRaw(initOverrides);
+        return await response.value();
+    }
+
+    /**
+     */
+    async loginRaw(requestParameters: LoginRequest, initOverrides?: RequestInit): Promise<runtime.ApiResponse<string>> {
+        if (requestParameters.loginDto === null || requestParameters.loginDto === undefined) {
+            throw new runtime.RequiredError('loginDto','Required parameter requestParameters.loginDto was null or undefined when calling login.');
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        const response = await this.request({
+            path: `/api/auth`,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: LoginDtoToJSON(requestParameters.loginDto),
+        }, initOverrides);
+
+        return new runtime.TextApiResponse(response) as any;
+    }
+
+    /**
+     */
+    async login(requestParameters: LoginRequest, initOverrides?: RequestInit): Promise<string> {
+        const response = await this.loginRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
@@ -193,6 +351,14 @@ export class DefaultApi extends runtime.BaseAPI implements DefaultApiInterface {
 
         headerParameters['Content-Type'] = 'application/json';
 
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
         const response = await this.request({
             path: `/api/tasks/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))),
             method: 'PATCH',

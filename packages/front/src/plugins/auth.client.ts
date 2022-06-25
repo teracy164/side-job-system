@@ -1,34 +1,43 @@
+import { StorageKey } from '~~/constants/storage-key.constants';
+import { DefaultApi, LoginDto } from '~~/lib/api-client';
+import { LoginUser } from '~~/types/login-user';
+
 declare module '#app' {
   interface NuxtApp {
     $auth: AuthService;
   }
 }
 
-const TOKEN_KEY = 'access_token';
-
 class AuthService {
-  constructor() {
-    console.log('auth client init');
+  constructor(private api: DefaultApi) {}
+
+  async login(loginDto: LoginDto) {
+    const token = await this.api.login({ loginDto });
+    localStorage.setItem(StorageKey.ACCESS_TOKEN, token);
+    return true;
   }
-  async login() {
-    localStorage.setItem(TOKEN_KEY, new Date().toDateString());
-    return [{ id: 1, title: 'task1', description: '説明' }];
-  }
-  async isLoggedIn() {
-    // TODO
-    const token = localStorage.getItem(TOKEN_KEY);
-    return !!token;
+  isLoggedIn() {
+    return !!this.getLoginUser();
   }
   async logout() {
-    localStorage.removeItem(TOKEN_KEY);
+    localStorage.removeItem(StorageKey.ACCESS_TOKEN);
     navigateTo({ path: '/login' });
+  }
+  getLoginUser() {
+    const data = localStorage.getItem(StorageKey.ACCESS_TOKEN);
+    if (data) {
+      const split = data.split('.');
+      // JWTデコード
+      return JSON.parse(atob(split[1])) as LoginUser;
+    }
+    return null;
   }
 }
 
-export default defineNuxtPlugin(() => {
+export default defineNuxtPlugin((ctx) => {
   return {
     provide: {
-      auth: new AuthService(),
+      auth: new AuthService(ctx.vueApp.$nuxt.$api),
     },
   };
 });

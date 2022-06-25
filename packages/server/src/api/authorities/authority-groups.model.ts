@@ -2,48 +2,43 @@ import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import {
   Column,
   CreatedAt,
-  DefaultScope,
+  HasMany,
   Model,
   Table,
   UpdatedAt,
-  Scopes,
+  DefaultScope,
 } from 'sequelize-typescript';
-
-export enum Scope {
-  AUTH = 'auth',
-}
+import { Authority } from './authorities.model';
+import { AuthorityWrapper } from './authority-wrappers.model';
 
 @DefaultScope(() => ({
-  attributes: {
-    exclude: ['password', 'salt'],
-  },
-}))
-@Scopes(() => ({
-  [Scope.AUTH]: {
-    attributes: {
-      exclude: [],
+  include: [
+    {
+      model: AuthorityWrapper,
+      include: [
+        { model: Authority },
+        // { model: AuthorityGroup, as: 'childGroup' },
+      ],
     },
-  },
+  ],
 }))
 @Table({
-  tableName: 'users',
+  tableName: 'authority_groups',
   underscored: true,
   timestamps: true,
 })
-export class User extends Model {
+export class AuthorityGroup extends Model {
   @ApiPropertyOptional()
   @Column({ primaryKey: true })
   id: number;
 
   @ApiProperty()
-  @Column
+  @Column({ comment: '権限グループ名' })
   name: string;
 
+  @ApiProperty()
   @Column
-  loginId: string;
-
-  @Column
-  hash: string;
+  isDeleted: boolean;
 
   @ApiPropertyOptional()
   @CreatedAt
@@ -57,4 +52,7 @@ export class User extends Model {
   @ApiPropertyOptional()
   @Column
   updateUserId: number;
+
+  @HasMany(() => AuthorityWrapper)
+  authorities: AuthorityWrapper[];
 }

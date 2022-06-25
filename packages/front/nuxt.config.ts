@@ -9,6 +9,10 @@ export default defineNuxtConfig({
     server: {
       host: '0.0.0.0',
       port: Number(process.env.PORT || 3000),
+      watch: {
+        usePolling: true,
+        interval: 3000,
+      },
     },
   },
   typescript: {

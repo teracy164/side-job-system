@@ -47,8 +47,8 @@
         <template v-slot:footer>
             <div>
                 <template v-if="acceptable">
-                    <button v-if="accepted" class="danger">仕事をキャンセル</button>
-                    <button v-else class="primary">仕事を受ける</button>
+                    <button v-if="accepted" class="danger" @click="cancelTask">仕事をキャンセル</button>
+                    <button v-else class="primary" @click="takeTask">仕事を受ける</button>
                 </template>
             </div>
             <div>
@@ -62,6 +62,7 @@
 </template>
 <script lang="ts">
 import GoogleIcon from '@/components/parts/google-icon.vue';
+import dayjs from 'dayjs';
 import { PropType } from 'vue';
 import { Task } from '~~/lib/api-client';
 import Dialog from '../parts/dialog.vue';
@@ -85,7 +86,16 @@ export default defineComponent({
         }
     },
     setup(props, context) {
-        const data = reactive({ visibleDialog: props.visible, visibleEditDialog: false, acceptable: false, accepted: false });
+        const task = props.task;
+
+        // 受領可能かチェック
+        let acceptable = dayjs().isBefore(task.expireDate, 'date');
+        if (task.assigners?.length === task.recruitmentNumber) {
+            // すでに募集人数に達している場合は受託負荷
+            acceptable = false;
+        }
+
+        const data = reactive({ visibleDialog: props.visible, visibleEditDialog: false, acceptable, accepted: false });
         return data;
     },
     methods: {
@@ -110,7 +120,13 @@ export default defineComponent({
         },
         close() {
             this.$emit('update:visible', false)
-        }
+        },
+        takeTask() {
+            alert('仕事を受領');
+        },
+        cancelTask() {
+            alert('キャンセル');
+        },
     },
     components: { GoogleIcon, Dialog, TaskEditOverlay },
 });

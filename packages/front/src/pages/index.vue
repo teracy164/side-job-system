@@ -10,13 +10,16 @@
       </div>
     </div>
     <div style="display: flex; justify-content: ;">
-      <div style="flex-basis: 50%;">
+      <div class="my-tasks" style="flex-basis: 50%;">
         <h4><label>マイタスク</label></h4>
         <div class="p-10">
-          <div class="card">
-            <div class="title">XXXXXXXX</div>
-            <div class="title">
-              期限だけ表示
+          <div v-for="task of myTasks">
+            <div class="card shadow">
+              <h4 class="title">{{ task.title }}</h4>
+              <div class="date">
+                <GoogleIcon icon="event" />
+                {{ $dateFormat(task.expireDate) }}
+              </div>
             </div>
           </div>
         </div>
@@ -36,22 +39,32 @@
 import TaskCard from "~~/components/task/task-card.vue";
 import { Task } from "~~/lib/api-client";
 import TaskDetailOverlay from "~~/components/task/task-detail-overlay.vue";
+import GoogleIcon from '@/components/parts/google-icon.vue';
 
 definePageMeta({ layout: 'authenticated', middleware: ['auth'] });
 export default defineComponent({
   setup() {
     const data = reactive<{
       tasks: Task[];
+      myTasks: Task[];
       detail: Task | null;
-    }>({ tasks: [], detail: null });
+    }>({ tasks: [], myTasks: [], detail: null });
     return data;
   },
-  async mounted() {
-    const { $api } = useNuxtApp();
-    const tasks = await $api.getTasks();
-    this.tasks = tasks.slice(0, 10)
+  mounted() {
+    this.loadTasks();
+    this.loadMyTasks();
   },
   methods: {
+    async loadTasks() {
+      const tasks = await this.$api.getTasks();
+      this.tasks = tasks?.slice(0, 10) || []
+    },
+    async loadMyTasks() {
+      const tasks = await this.$api.getMyTasks();
+      // 期限が古い方から降順に並び替え
+      this.myTasks = tasks?.sort((s1, s2) => s1.expireDate < s2.expireDate ? -1 : 1) || []
+    },
     showTaskDetail(event: Event, task: Task) {
       this.detail = task;
     },
@@ -59,7 +72,7 @@ export default defineComponent({
       navigateTo(path);
     },
   },
-  components: { TaskCard, TaskDetailOverlay }
+  components: { TaskCard, TaskDetailOverlay, GoogleIcon },
 });
 </script>
 <style lang="scss" scoped>
@@ -82,6 +95,28 @@ h4 {
 
     .task {
       zoom: 80%;
+    }
+  }
+}
+
+.my-tasks {
+  .card {
+    display: flex;
+    margin-bottom: 5px;
+
+    .title {
+      flex-basis: 100%;
+      margin: 0;
+    }
+
+    .date {
+      display: flex;
+      justify-content: center;
+      white-space: nowrap;
+
+      i {
+        line-height: 1.3em;
+      }
     }
   }
 }

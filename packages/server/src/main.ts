@@ -14,6 +14,7 @@ async function bootstrap() {
   const config = new DocumentBuilder()
     .setTitle('ShaFuku API')
     .setVersion('1.0')
+    .addBearerAuth()
     .build();
   const options: SwaggerDocumentOptions = {
     operationIdFactory: (controllerKey: string, methodKey: string) => methodKey,

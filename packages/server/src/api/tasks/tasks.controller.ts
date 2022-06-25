@@ -6,11 +6,17 @@ import {
   ParseIntPipe,
   Patch,
   Post,
+  Request,
+  UseGuards,
 } from '@nestjs/common';
-import { ApiResponse } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiResponse } from '@nestjs/swagger';
+import { JwtPayload } from 'src/types/jwt-payload';
+import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { Task } from './task.model';
 import { TasksService } from './tasks.service';
 
+@ApiBearerAuth()
+@UseGuards(JwtAuthGuard)
 @Controller({ path: 'tasks' })
 export class TasksController {
   constructor(private readonly service: TasksService) {}
@@ -19,6 +25,14 @@ export class TasksController {
   @ApiResponse({ type: [Task] })
   getTasks() {
     return this.service.getTasks();
+  }
+
+  @Get('/mine')
+  @ApiResponse({ type: [Task] })
+  getMyTasks(@Request() req) {
+    const payload = req.user as JwtPayload;
+    console.log(payload);
+    return this.service.searchTasks(payload.id);
   }
 
   @Post()
