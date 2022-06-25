@@ -108,7 +108,7 @@ header {
 }
 
 .logo:hover {
-    background-color: #e6e6ff;
+    background-color: rgba(230, 230, 255, 0.4);
     cursor: pointer;
 }
 </style>

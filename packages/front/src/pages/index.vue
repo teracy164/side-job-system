@@ -6,7 +6,6 @@
         <div class="wrapper">
           <TaskCard v-for="task of tasks" :task="task" @onclick="showTaskDetail" />
         </div>
-        <TaskDetailOverlay v-if="detail" :visible="!!detail" :task="detail" @update:visible="detail = null" />
       </div>
     </div>
     <div style="display: flex; justify-content: ;">
@@ -14,7 +13,7 @@
         <h4><label>マイタスク</label></h4>
         <div class="p-10">
           <div v-for="task of myTasks">
-            <div class="card shadow">
+            <div class="card shadow" @click="detail = task">
               <h4 class="title">{{ task.title }}</h4>
               <div class="date">
                 <GoogleIcon icon="event" />
@@ -33,6 +32,7 @@
         </ul>
       </div>
     </div>
+    <TaskDetailOverlay v-if="detail" :visible="!!detail" :task="detail" @update:visible="detail = null" />
   </div>
 </template>
 <script lang="ts">
@@ -103,6 +103,7 @@ h4 {
   .card {
     display: flex;
     margin-bottom: 5px;
+    cursor: pointer;
 
     .title {
       flex-basis: 100%;
@@ -118,6 +119,10 @@ h4 {
         line-height: 1.3em;
       }
     }
+  }
+
+  .card:hover {
+    background-color: #f9f9ff;
   }
 }
 </style>
