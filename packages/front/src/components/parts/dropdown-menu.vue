@@ -6,6 +6,7 @@
             </a>
         </div>
         <div v-show="isShow" ref="overlayPanel" class="overlay-panel">
+            <slot name="prepend"></slot>
             <div v-if="isShow" class="menu-items">
                 <div v-for="item of menuItems" class="menu-item" @click="onclick($event, item)">
                     <router-link v-if="item.link" :to="item.link" class="v-center">
@@ -16,6 +17,7 @@
                     </a>
                 </div>
             </div>
+            <slot name="append"></slot>
         </div>
     </div>
 </template>

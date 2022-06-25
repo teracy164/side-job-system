@@ -15,7 +15,14 @@
                     <GoogleIcon icon="emoji_events" />実績
                 </router-link>
                 <DropdownMenu :title="'管理者用'" :menu-items="adminMenuItems" />
-                <DropdownMenu icon="manage_accounts" :menu-items="menuItems" />
+                <DropdownMenu icon="manage_accounts" :menu-items="menuItems">
+                    <template v-slot:prepend>
+                        <div class="dropdown-prepend">
+                            <GoogleIcon icon="account_circle" />
+                            {{ getLoginUserName() }}
+                        </div>
+                    </template>
+                </DropdownMenu>
             </div>
         </div>
     </header>
@@ -52,6 +59,9 @@ export default defineComponent({
             const router = useRouter();
             router.push(path);
         },
+        getLoginUserName() {
+            return this.$auth.getLoginUser()?.name || '';
+        }
     },
     components: { DropdownMenu, GoogleIcon }
 });
@@ -110,5 +120,12 @@ header {
 .logo:hover {
     background-color: rgba(230, 230, 255, 0.4);
     cursor: pointer;
+}
+
+.dropdown-prepend {
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid #f0f0f0;
+    padding: 5px;
 }
 </style>
