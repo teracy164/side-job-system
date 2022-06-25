@@ -46,9 +46,9 @@
         </div>
         <template v-slot:footer>
             <div>
-                <template v-if="acceptable">
-                    <button v-if="accepted" class="danger" @click="cancelTask">仕事をキャンセル</button>
-                    <button v-else class="primary" @click="takeTask">仕事を受ける</button>
+                <button v-if="isAssigned()" class="danger" @click="cancelTask">仕事をキャンセル</button>
+                <template v-else>
+                    <button v-if="acceptable" class="primary" @click="takeTask">仕事を受ける</button>
                 </template>
             </div>
             <div>
@@ -59,9 +59,11 @@
     </Dialog>
     <TaskEditOverlay v-if="visible && editable" :visible="visibleEditDialog" :task="task" @update:task="updateTask"
         @update:visible="oncloseEditDialog" />
+    <Confirm ref="confirm" />
 </template>
 <script lang="ts">
 import GoogleIcon from '@/components/parts/google-icon.vue';
+import Confirm from '@/components/parts/confirm.vue';
 import dayjs from 'dayjs';
 import { PropType } from 'vue';
 import { Task } from '~~/lib/api-client';
@@ -90,12 +92,14 @@ export default defineComponent({
 
         // 受領可能かチェック
         let acceptable = dayjs().isBefore(task.expireDate, 'date');
-        if (task.assigners?.length === task.recruitmentNumber) {
-            // すでに募集人数に達している場合は受託負荷
-            acceptable = false;
+        if (task.assigners?.length) {
+            if (task.assigners.length === task.recruitmentNumber) {
+                // すでに募集人数に達している場合は受託負荷
+                acceptable = false;
+            }
         }
 
-        const data = reactive({ visibleDialog: props.visible, visibleEditDialog: false, acceptable, accepted: false });
+        const data = reactive({ visibleDialog: props.visible, visibleEditDialog: false, acceptable });
         return data;
     },
     methods: {
@@ -121,18 +125,54 @@ export default defineComponent({
         close() {
             this.$emit('update:visible', false)
         },
+        isAssigned() {
+            const loginUserId = this.$auth.getLoginUser()?.id || -1;
+            if (loginUserId > 0) {
+                console.log('isAssigned', this.task.assigners)
+                return this.task.assigners?.some(a => a.id === loginUserId) || false;
+            }
+            return false;
+        },
         async takeTask() {
+            (this.$refs.confirm as any).show({
+                title: '確認',
+                message: 'タスクを受領します。よろしいですか？',
+                onaccept: this.procTakeTask
+            });
+        },
+        async procTakeTask() {
             try {
-                await this.$api.assignTask({ id: this.task.id as number });
+                const task = await this.$api.assignTask({ id: this.task.id as number });
+                this.task.assigners?.splice(0, this.task.assigners.length, ...(task.assigners || []));
+                this.$emit('update:assigner', task);
             } catch (err) {
                 alert(err);
             }
         },
         cancelTask() {
-            alert('キャンセル');
+            (this.$refs.confirm as any).show({
+                title: '確認',
+                message: 'キャンセルしてよろしいですか？',
+                onaccept: this.procCancelTask
+            });
         },
+        async procCancelTask() {
+            try {
+                await this.$api.cancelTask({ id: this.task.id as number });
+
+                if (this.task.assigners?.length) {
+                    const userId = this.$auth.getLoginUser()?.id || -1;
+                    const targetIndex = this.task.assigners.findIndex(a => a.id === userId);
+                    console.log(userId, targetIndex, this.task.assigners)
+                    if (targetIndex >= 0) this.task.assigners?.splice(targetIndex, 1);
+
+                }
+            } catch (err) {
+                alert(err)
+            }
+        }
     },
-    components: { GoogleIcon, Dialog, TaskEditOverlay },
+    components: { GoogleIcon, Dialog, TaskEditOverlay, Confirm },
 });
 </script>
 <style lang="scss" scoped>

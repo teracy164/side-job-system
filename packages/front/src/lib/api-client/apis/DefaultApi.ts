@@ -37,6 +37,10 @@ export interface AssignTaskRequest {
     id: number;
 }
 
+export interface CancelTaskRequest {
+    id: number;
+}
+
 export interface LoginRequest {
     loginDto: LoginDto;
 }
@@ -78,6 +82,19 @@ export interface DefaultApiInterface {
     /**
      */
     assignTask(requestParameters: AssignTaskRequest, initOverrides?: RequestInit): Promise<Task>;
+
+    /**
+     * 
+     * @param {number} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DefaultApiInterface
+     */
+    cancelTaskRaw(requestParameters: CancelTaskRequest, initOverrides?: RequestInit): Promise<runtime.ApiResponse<Task>>;
+
+    /**
+     */
+    cancelTask(requestParameters: CancelTaskRequest, initOverrides?: RequestInit): Promise<Task>;
 
     /**
      * 
@@ -233,6 +250,42 @@ export class DefaultApi extends runtime.BaseAPI implements DefaultApiInterface {
      */
     async assignTask(requestParameters: AssignTaskRequest, initOverrides?: RequestInit): Promise<Task> {
         const response = await this.assignTaskRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     */
+    async cancelTaskRaw(requestParameters: CancelTaskRequest, initOverrides?: RequestInit): Promise<runtime.ApiResponse<Task>> {
+        if (requestParameters.id === null || requestParameters.id === undefined) {
+            throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling cancelTask.');
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+        const response = await this.request({
+            path: `/api/tasks/{id}/assigner`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))),
+            method: 'DELETE',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => TaskFromJSON(jsonValue));
+    }
+
+    /**
+     */
+    async cancelTask(requestParameters: CancelTaskRequest, initOverrides?: RequestInit): Promise<Task> {
+        const response = await this.cancelTaskRaw(requestParameters, initOverrides);
         return await response.value();
     }
 

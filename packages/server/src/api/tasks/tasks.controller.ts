@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   Param,
   ParseIntPipe,
@@ -52,5 +53,12 @@ export class TasksController {
   assignTask(@Request() req, @Param('id', ParseIntPipe) id: number) {
     const payload = req.user as JwtPayload;
     return this.service.assign(payload, id);
+  }
+
+  @Delete(':id/assigner')
+  @ApiResponse({ type: Task })
+  cancelTask(@Request() req, @Param('id', ParseIntPipe) id: number) {
+    const payload = req.user as JwtPayload;
+    return this.service.cancel(payload, id);
   }
 }

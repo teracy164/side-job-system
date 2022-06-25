@@ -61,4 +61,15 @@ export class TasksService {
     }
     throw new NotFoundException();
   }
+
+  async cancel(user: JwtPayload, taskId: number) {
+    const result = await this.modelAssign.destroy({
+      where: { taskId, userId: user.id },
+    });
+
+    if (result > 0) {
+      return true;
+    }
+    throw new BadRequestException('アサインしていません');
+  }
 }

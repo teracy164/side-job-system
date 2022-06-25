@@ -15,7 +15,7 @@ export enum Scope {
 
 @DefaultScope(() => ({
   attributes: {
-    exclude: ['password', 'salt'],
+    exclude: ['hash'],
   },
 }))
 @Scopes(() => ({
