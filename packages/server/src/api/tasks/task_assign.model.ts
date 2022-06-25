@@ -18,7 +18,7 @@ import { Task } from './task.model';
 })
 export class TaskAssign extends Model {
   @ApiPropertyOptional()
-  @Column({ primaryKey: true })
+  @Column({ primaryKey: true, autoIncrement: true })
   id: number;
 
   @ApiProperty()

@@ -32,7 +32,7 @@ export enum Scope {
 })
 export class User extends Model {
   @ApiPropertyOptional()
-  @Column({ primaryKey: true })
+  @Column({ primaryKey: true, autoIncrement: true })
   id: number;
 
   @ApiProperty()

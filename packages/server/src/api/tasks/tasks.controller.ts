@@ -46,4 +46,11 @@ export class TasksController {
   updateTask(@Param('id', ParseIntPipe) id: number, @Body() body: Task) {
     return this.service.update(id, body);
   }
+
+  @Patch(':id/assigner')
+  @ApiResponse({ type: Task })
+  assignTask(@Request() req, @Param('id', ParseIntPipe) id: number) {
+    const payload = req.user as JwtPayload;
+    return this.service.assign(payload, id);
+  }
 }

@@ -33,6 +33,10 @@ export interface AddTaskRequest {
     task: Task;
 }
 
+export interface AssignTaskRequest {
+    id: number;
+}
+
 export interface LoginRequest {
     loginDto: LoginDto;
 }
@@ -61,6 +65,19 @@ export interface DefaultApiInterface {
     /**
      */
     addTask(requestParameters: AddTaskRequest, initOverrides?: RequestInit): Promise<Task>;
+
+    /**
+     * 
+     * @param {number} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DefaultApiInterface
+     */
+    assignTaskRaw(requestParameters: AssignTaskRequest, initOverrides?: RequestInit): Promise<runtime.ApiResponse<Task>>;
+
+    /**
+     */
+    assignTask(requestParameters: AssignTaskRequest, initOverrides?: RequestInit): Promise<Task>;
 
     /**
      * 
@@ -180,6 +197,42 @@ export class DefaultApi extends runtime.BaseAPI implements DefaultApiInterface {
      */
     async addTask(requestParameters: AddTaskRequest, initOverrides?: RequestInit): Promise<Task> {
         const response = await this.addTaskRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     */
+    async assignTaskRaw(requestParameters: AssignTaskRequest, initOverrides?: RequestInit): Promise<runtime.ApiResponse<Task>> {
+        if (requestParameters.id === null || requestParameters.id === undefined) {
+            throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling assignTask.');
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+        const response = await this.request({
+            path: `/api/tasks/{id}/assigner`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))),
+            method: 'PATCH',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => TaskFromJSON(jsonValue));
+    }
+
+    /**
+     */
+    async assignTask(requestParameters: AssignTaskRequest, initOverrides?: RequestInit): Promise<Task> {
+        const response = await this.assignTaskRaw(requestParameters, initOverrides);
         return await response.value();
     }
 

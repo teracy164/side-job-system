@@ -121,8 +121,12 @@ export default defineComponent({
         close() {
             this.$emit('update:visible', false)
         },
-        takeTask() {
-            alert('仕事を受領');
+        async takeTask() {
+            try {
+                await this.$api.assignTask({ id: this.task.id as number });
+            } catch (err) {
+                alert(err);
+            }
         },
         cancelTask() {
             alert('キャンセル');
