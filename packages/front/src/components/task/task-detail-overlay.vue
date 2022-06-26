@@ -128,7 +128,6 @@ export default defineComponent({
         isAssigned() {
             const loginUserId = this.$auth.getLoginUser()?.id || -1;
             if (loginUserId > 0) {
-                console.log('isAssigned', this.task.assigners)
                 return this.task.assigners?.some(a => a.id === loginUserId) || false;
             }
             return false;
@@ -163,10 +162,9 @@ export default defineComponent({
                 if (this.task.assigners?.length) {
                     const userId = this.$auth.getLoginUser()?.id || -1;
                     const targetIndex = this.task.assigners.findIndex(a => a.id === userId);
-                    console.log(userId, targetIndex, this.task.assigners)
                     if (targetIndex >= 0) this.task.assigners?.splice(targetIndex, 1);
-
                 }
+                this.$emit('update:assigner', this.task);
             } catch (err) {
                 alert(err)
             }

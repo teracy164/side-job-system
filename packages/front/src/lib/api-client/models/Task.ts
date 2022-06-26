@@ -14,6 +14,12 @@
 
 import { exists, mapValues } from '../runtime';
 import {
+    TaskStatus,
+    TaskStatusFromJSON,
+    TaskStatusFromJSONTyped,
+    TaskStatusToJSON,
+} from './TaskStatus';
+import {
     User,
     UserFromJSON,
     UserFromJSONTyped,
@@ -110,6 +116,12 @@ export interface Task {
      * @memberof Task
      */
     assigners?: Array<User>;
+    /**
+     * 
+     * @type {Array<TaskStatus>}
+     * @memberof Task
+     */
+    statuses?: Array<TaskStatus>;
 }
 
 export function TaskFromJSON(json: any): Task {
@@ -136,6 +148,7 @@ export function TaskFromJSONTyped(json: any, ignoreDiscriminator: boolean): Task
         'updatedAt': !exists(json, 'updatedAt') ? undefined : json['updatedAt'],
         'updateUserId': !exists(json, 'updateUserId') ? undefined : json['updateUserId'],
         'assigners': !exists(json, 'assigners') ? undefined : ((json['assigners'] as Array<any>).map(UserFromJSON)),
+        'statuses': !exists(json, 'statuses') ? undefined : ((json['statuses'] as Array<any>).map(TaskStatusFromJSON)),
     };
 }
 
@@ -162,6 +175,7 @@ export function TaskToJSON(value?: Task | null): any {
         'updatedAt': value.updatedAt,
         'updateUserId': value.updateUserId,
         'assigners': value.assigners === undefined ? undefined : ((value.assigners as Array<any>).map(UserToJSON)),
+        'statuses': value.statuses === undefined ? undefined : ((value.statuses as Array<any>).map(TaskStatusToJSON)),
     };
 }
 

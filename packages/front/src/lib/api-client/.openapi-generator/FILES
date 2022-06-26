@@ -4,6 +4,7 @@ index.ts
 models/AuthorityGroup.ts
 models/LoginDto.ts
 models/Task.ts
+models/TaskStatus.ts
 models/User.ts
 models/index.ts
 runtime.ts

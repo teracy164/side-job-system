@@ -32,7 +32,8 @@
         </ul>
       </div>
     </div>
-    <TaskDetailOverlay v-if="detail" :visible="!!detail" :task="detail" @update:visible="detail = null" />
+    <TaskDetailOverlay v-if="detail" :visible="!!detail" :task="detail" @update:visible="detail = null"
+      @update:assigner="onUpdateAssigner" />
   </div>
 </template>
 <script lang="ts">
@@ -71,6 +72,9 @@ export default defineComponent({
     navigate(path: string) {
       navigateTo(path);
     },
+    onUpdateAssigner() {
+      this.loadMyTasks();
+    }
   },
   components: { TaskCard, TaskDetailOverlay, GoogleIcon },
 });

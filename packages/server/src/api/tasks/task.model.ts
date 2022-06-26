@@ -12,10 +12,11 @@ import {
 } from 'sequelize-typescript';
 import { User } from '../users/user.model';
 import { TaskAssign } from './task_assign.model';
+import { TaskStatus } from './task_status.model';
 
 @DefaultScope(() => ({
-  include: [User],
-  order: ['id'],
+  include: [User, TaskStatus],
+  order: [['statuses', 'createdAt', 'desc'], 'id'],
 }))
 @Table({
   tableName: 'tasks',
@@ -72,4 +73,8 @@ export class Task extends Model {
   @ApiPropertyOptional({ type: User, isArray: true })
   @BelongsToMany(() => User, () => TaskAssign)
   assigners?: User[];
+
+  @ApiPropertyOptional({ type: TaskStatus, isArray: true })
+  @HasMany(() => TaskStatus)
+  statuses?: TaskStatus[];
 }
