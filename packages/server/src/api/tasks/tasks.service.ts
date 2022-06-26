@@ -4,7 +4,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
-import { JwtPayload } from 'src/types/jwt-payload';
+import { LoginUser } from 'src/shared/types/auth';
 import { Task } from './task.model';
 import { TaskAssign } from './task_assign.model';
 
@@ -37,7 +37,7 @@ export class TasksService {
     throw new BadRequestException();
   }
 
-  async assign(user: JwtPayload, taskId: number) {
+  async assign(user: LoginUser, taskId: number) {
     const task = await this.model.findOne({ where: { id: taskId } });
     if (task) {
       const alreadyAssigned = task.assigners?.some((a) => a.id === user.id);
@@ -62,7 +62,7 @@ export class TasksService {
     throw new NotFoundException();
   }
 
-  async cancel(user: JwtPayload, taskId: number) {
+  async cancel(user: LoginUser, taskId: number) {
     const result = await this.modelAssign.destroy({
       where: { taskId, userId: user.id },
     });
