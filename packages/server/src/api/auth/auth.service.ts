@@ -3,7 +3,7 @@ import { UsersService } from '../users/users.service';
 import { JwtService } from '@nestjs/jwt';
 import { LoginDto } from './dto/login.dto';
 import * as CryptoJS from 'crypto-js';
-import { JwtPayload } from 'src/types/jwt-payload';
+import { JwtPayload } from 'src/shared/types/auth';
 
 @Injectable()
 export class AuthService {
@@ -28,7 +28,7 @@ export class AuthService {
     if (user) {
       const hash = this.encrypto(dto.password);
       if (hash === user.hash) {
-        const payload: JwtPayload = { id: user.id, name: user.name };
+        const payload = { id: user.id, name: user.name } as JwtPayload;
         return this.jwtService.sign(payload);
       }
     }

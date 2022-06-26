@@ -11,7 +11,7 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiResponse } from '@nestjs/swagger';
-import { JwtPayload } from 'src/types/jwt-payload';
+import { LoginUser } from 'src/shared/types/auth';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { Task } from './task.model';
 import { TasksService } from './tasks.service';
@@ -31,7 +31,7 @@ export class TasksController {
   @Get('/mine')
   @ApiResponse({ type: [Task] })
   getMyTasks(@Request() req) {
-    const payload = req.user as JwtPayload;
+    const payload = req.user as LoginUser;
     console.log(payload);
     return this.service.searchTasks(payload.id);
   }
@@ -51,14 +51,14 @@ export class TasksController {
   @Patch(':id/assigner')
   @ApiResponse({ type: Task })
   assignTask(@Request() req, @Param('id', ParseIntPipe) id: number) {
-    const payload = req.user as JwtPayload;
+    const payload = req.user as LoginUser;
     return this.service.assign(payload, id);
   }
 
   @Delete(':id/assigner')
   @ApiResponse({ type: Task })
   cancelTask(@Request() req, @Param('id', ParseIntPipe) id: number) {
-    const payload = req.user as JwtPayload;
+    const payload = req.user as LoginUser;
     return this.service.cancel(payload, id);
   }
 }

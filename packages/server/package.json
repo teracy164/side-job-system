@@ -31,6 +31,7 @@
     "@nestjs/sequelize": "^8.0.0",
     "@nestjs/serve-static": "^2.2.2",
     "@nestjs/swagger": "^5.2.1",
+    "@shafuku/shared": "^1.0.0",
     "@types/crypto-js": "^4.1.1",
     "crypto-js": "^4.1.1",
     "passport": "^0.6.0",

@@ -9,7 +9,6 @@ export class TaskUtil {
   }
   toStatusName(task: Task) {
     const status = this.getNowStatus(task);
-    // TODO サーバー側とステータス値を定数で共有
     switch (status) {
       case 2:
         return '完了';
