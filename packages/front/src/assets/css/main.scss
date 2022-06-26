@@ -237,3 +237,20 @@ table {
   display: flex;
   align-items: center;
 }
+
+.headline {
+  margin: 0;
+
+  label {
+    border-bottom: 1px solid #ddddff;
+    padding-right: 5px;
+  }
+
+  label::before {
+    content: '';
+    padding: 0 3px;
+    background-color: #ddddff;
+    border-top-left-radius: 5px;
+    margin-right: 5px;
+  }
+}

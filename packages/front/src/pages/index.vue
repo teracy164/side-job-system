@@ -1,7 +1,13 @@
 <template>
   <div>
     <div class="tasks">
-      <h4><label>新着</label><a style="font-size: 0.8em; margin-left: 20px;" @click="navigate('/tasks')">探す</a></h4>
+      <h4 class="headline v-center">
+        <label>新着</label>
+        <a class="v-center" style="font-size: 0.8em; margin-left: 20px;" @click="navigate('/tasks')">
+          <GoogleIcon icon="search" />
+          探す
+        </a>
+      </h4>
       <div class=" p-10">
         <div class="wrapper">
           <TaskCard v-for="task of tasks" :task="task" @onclick="showTaskDetail" />
@@ -10,7 +16,7 @@
     </div>
     <div style="display: flex; justify-content: ;">
       <div class="my-tasks" style="flex-basis: 50%;">
-        <h4><label>マイタスク</label></h4>
+        <h4 class="headline"><label>マイタスク</label></h4>
         <div class="p-10">
           <div v-for="task of myTasks">
             <div class="card shadow" @click="detail = task">
@@ -24,7 +30,7 @@
         </div>
       </div>
       <div style="flex-basis: 50%;">
-        <h4><label>アクティビティ</label></h4>
+        <h4 class="headline"><label>アクティビティ</label></h4>
         <ul>
           <li>YYYY/MM/DD XXXを完了</li>
           <li>YYYY/MM/DD XXXを受領</li>
@@ -64,7 +70,7 @@ export default defineComponent({
     async loadMyTasks() {
       const tasks = await this.$api.getMyTasks();
       // 期限が古い方から降順に並び替え
-      this.myTasks = tasks?.sort((s1, s2) => s1.expireDate < s2.expireDate ? -1 : 1) || []
+      this.myTasks = tasks?.filter(t => ![1, 2].includes(this.$utils.task.getNowStatus(t))).sort((s1, s2) => s1.expireDate < s2.expireDate ? -1 : 1) || []
     },
     showTaskDetail(event: Event, task: Task) {
       this.detail = task;
@@ -80,14 +86,6 @@ export default defineComponent({
 });
 </script>
 <style lang="scss" scoped>
-h4 {
-  margin: 0;
-
-  label {
-    border-bottom: 1px solid black;
-  }
-}
-
 .tasks {
   margin-bottom: 20px;
 

@@ -6,7 +6,7 @@
       </div>
     </div>
     <div>
-      <h4><label>受領中</label></h4>
+      <h4 class="headline"><label>受領中</label></h4>
       <div style="padding:10px;">
         <div class="wrapper" style="max-width: 100%; overflow-x: auto;display: flex; zoom: 80%;">
           <TaskCard v-for="task of openTasks" :task="task" @click="showDetail(task)" />
@@ -15,7 +15,7 @@
     </div>
     <div>
       <div class="v-center">
-        <h4><label>すべて</label></h4>
+        <h4 class="headline"><label>すべて</label></h4>
         <div style="padding: 0 20px;">
           <input type="month" style="width: 100px">
         </div>
@@ -37,7 +37,7 @@
               <td>{{ task.client }}</td>
               <td>{{ $currency(task.price) }}</td>
               <td>{{ $dateFormat(task.expireDate) }}</td>
-              <td>{{ toStatusName(task) }}</td>
+              <td>{{ $utils.task.toStatusName(task) }}</td>
             </tr>
           </tbody>
         </table>
@@ -75,7 +75,8 @@ export default defineComponent({
   methods: {
     async loadTasks() {
       this.tasks = await this.$api.getMyTasks();
-      this.openTasks = this.tasks.filter(t => ![1, 2].includes(this.getNowStatus(t)));
+      this.openTasks = this.tasks.filter(t => ![1, 2].includes(this.$utils.task.getNowStatus(t)));
+      console.log(this.openTasks)
     },
     setChartData() {
       this.chart.showable = false;
@@ -116,32 +117,9 @@ export default defineComponent({
       this.detail = null;
       this.$forceUpdate();
     },
-    getNowStatus(task: Task) {
-      if (task.statuses && task.statuses.length) {
-        return task.statuses[0].status;
-      }
-      return 0;
-    },
-    toStatusName(task: Task) {
-      const status = this.getNowStatus(task);
-      // TODO サーバー側とステータス値を定数で共有
-      switch (status) {
-        case 2: return '完了';
-        case 3: return 'クローズ';
-        default: return 'オープン';
-      }
-    },
   },
   components: { TaskDetailOverlay, BarChart, TaskCard }
 });
 </script>
 <style lang="scss" scoped>
-h4 {
-  margin: 0;
-
-  label {
-    border-bottom: 1px solid black;
-
-  }
-}
 </style>

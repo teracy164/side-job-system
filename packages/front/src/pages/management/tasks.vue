@@ -1,7 +1,7 @@
 <template>
   <div>
-    <h4>
-      発行済みの仕事
+    <h4 class="headline">
+      <label>発行済みの仕事</label>
       <button class="primary" style="margin-left: 20px" @click="addTask">追加</button>
     </h4>
     <table class="row-clickable">
