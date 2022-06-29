@@ -12,7 +12,7 @@ if (process.env.DATABASE_SSL) {
 @Module({
   imports: [
     ServeStaticModule.forRoot({
-      rootPath: join(__dirname, '../..', 'front/src/.output/public'),
+      rootPath: join(__dirname, '../../../..', 'front/src/.output/public'),
       exclude: ['/api/*'],
     }),
     SequelizeModule.forRoot({
