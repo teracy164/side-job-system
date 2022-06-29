@@ -1,7 +1,7 @@
 import dayjs from 'dayjs';
+import { LoginUser } from '~~/../../shared/lib/types/auth';
 import { StorageKey } from '~~/constants/storage-key.constants';
 import { DefaultApi, LoginDto } from '~~/lib/api-client';
-import { LoginUser } from '~~/types/login-user';
 
 declare module '#app' {
   interface NuxtApp {
