@@ -6,6 +6,8 @@
   },
   "compilerOptions": {
     "jsx": "preserve",
-    "typeRoots": ["./src/types"]
-  }
+    "typeRoots": ["./src/types", "../shared/lib/types"]
+  },
+  "include": ["./src/.nuxt/nuxt.d.ts", "./src/**/*", "../shared/lib/**/*"],
+  "references": [{ "path": "../shared/tsconfig.json" }]
 }

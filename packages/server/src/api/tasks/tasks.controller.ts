@@ -11,7 +11,7 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiResponse } from '@nestjs/swagger';
-import { LoginUser } from 'src/shared/types/auth';
+import { LoginUser } from '../../../../shared/lib/types/auth';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { Task } from './task.model';
 import { TasksService } from './tasks.service';

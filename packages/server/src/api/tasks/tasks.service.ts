@@ -4,7 +4,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
-import { LoginUser } from 'src/shared/types/auth';
+import { LoginUser } from '../../../../shared/lib/types/auth';
 import { Task } from './task.model';
 import { TaskAssign } from './task_assign.model';
 

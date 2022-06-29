@@ -14,7 +14,7 @@ services:
       # https://qiita.com/inumberx/items/a29640675c0fc5e5916a
       - 24678:24678
     volumes:
-      - ./packages/front:/develop/packages/front
+      - ./packages:/develop/packages
     command: "yarn dev"
     environment:
       - PORT=${FRONT_PORT}

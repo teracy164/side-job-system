@@ -1,3 +1,4 @@
+import { TaskStatus, TaskStatusName } from '~~/../../shared/lib';
 import { Task } from '~~/lib/api-client';
 
 export class TaskUtil {
@@ -8,14 +9,8 @@ export class TaskUtil {
     return 0;
   }
   toStatusName(task: Task) {
-    const status = this.getNowStatus(task);
-    switch (status) {
-      case 2:
-        return '完了';
-      case 3:
-        return 'クローズ';
-      default:
-        return 'オープン';
-    }
+    const status = this.getNowStatus(task) as TaskStatus;
+    const info = TaskStatusName[status] || TaskStatusName[TaskStatus.OPEN];
+    return info.name;
   }
 }

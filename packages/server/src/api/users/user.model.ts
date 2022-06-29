@@ -29,6 +29,7 @@ export enum Scope {
   tableName: 'users',
   underscored: true,
   timestamps: true,
+  indexes: [{ unique: true, fields: ['login_id'] }],
 })
 export class User extends Model {
   @ApiPropertyOptional()
@@ -39,6 +40,7 @@ export class User extends Model {
   @Column
   name: string;
 
+  @ApiPropertyOptional()
   @Column
   loginId: string;
 

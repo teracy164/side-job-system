@@ -16,6 +16,9 @@
     "noImplicitAny": false,
     "strictBindCallApply": false,
     "forceConsistentCasingInFileNames": false,
-    "noFallthroughCasesInSwitch": false
-  }
+    "noFallthroughCasesInSwitch": false,
+    "typeRoots": ["../shared/lib/types"]
+  },
+  "include": ["./src/**/*", "../shared/lib/**/*"],
+  "references": [{ "path": "../shared/tsconfig.json" }]
 }
