@@ -107,6 +107,7 @@ header {
     h1 {
         font-size: 1.2em;
         font-style: italic;
+        font-family: serif;
         margin: 0;
     }
 
