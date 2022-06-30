@@ -16,74 +16,81 @@ import { exists, mapValues } from '../runtime';
 /**
  * 
  * @export
- * @interface User
+ * @interface AddUserDto
  */
-export interface User {
+export interface AddUserDto {
     /**
      * 
      * @type {number}
-     * @memberof User
+     * @memberof AddUserDto
      */
     id?: number;
     /**
      * 
      * @type {string}
-     * @memberof User
+     * @memberof AddUserDto
      */
-    name: string;
+    name?: string;
     /**
      * 
      * @type {string}
-     * @memberof User
+     * @memberof AddUserDto
      */
     loginId?: string;
     /**
      * 
      * @type {string}
-     * @memberof User
+     * @memberof AddUserDto
      */
     createdAt?: string;
     /**
      * 
      * @type {number}
-     * @memberof User
+     * @memberof AddUserDto
      */
     createUserId?: number;
     /**
      * 
      * @type {string}
-     * @memberof User
+     * @memberof AddUserDto
      */
     updatedAt?: string;
     /**
      * 
      * @type {number}
-     * @memberof User
+     * @memberof AddUserDto
      */
     updateUserId?: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof AddUserDto
+     */
+    password: string;
 }
 
-export function UserFromJSON(json: any): User {
-    return UserFromJSONTyped(json, false);
+export function AddUserDtoFromJSON(json: any): AddUserDto {
+    return AddUserDtoFromJSONTyped(json, false);
 }
 
-export function UserFromJSONTyped(json: any, ignoreDiscriminator: boolean): User {
+export function AddUserDtoFromJSONTyped(json: any, ignoreDiscriminator: boolean): AddUserDto {
     if ((json === undefined) || (json === null)) {
         return json;
     }
     return {
         
         'id': !exists(json, 'id') ? undefined : json['id'],
-        'name': json['name'],
+        'name': !exists(json, 'name') ? undefined : json['name'],
         'loginId': !exists(json, 'loginId') ? undefined : json['loginId'],
         'createdAt': !exists(json, 'createdAt') ? undefined : json['createdAt'],
         'createUserId': !exists(json, 'createUserId') ? undefined : json['createUserId'],
         'updatedAt': !exists(json, 'updatedAt') ? undefined : json['updatedAt'],
         'updateUserId': !exists(json, 'updateUserId') ? undefined : json['updateUserId'],
+        'password': json['password'],
     };
 }
 
-export function UserToJSON(value?: User | null): any {
+export function AddUserDtoToJSON(value?: AddUserDto | null): any {
     if (value === undefined) {
         return undefined;
     }
@@ -99,6 +106,7 @@ export function UserToJSON(value?: User | null): any {
         'createUserId': value.createUserId,
         'updatedAt': value.updatedAt,
         'updateUserId': value.updateUserId,
+        'password': value.password,
     };
 }
 

@@ -1,6 +1,7 @@
 apis/DefaultApi.ts
 apis/index.ts
 index.ts
+models/AddUserDto.ts
 models/AuthorityGroup.ts
 models/LoginDto.ts
 models/Task.ts

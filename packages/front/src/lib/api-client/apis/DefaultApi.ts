@@ -15,6 +15,9 @@
 
 import * as runtime from '../runtime';
 import {
+    AddUserDto,
+    AddUserDtoFromJSON,
+    AddUserDtoToJSON,
     AuthorityGroup,
     AuthorityGroupFromJSON,
     AuthorityGroupToJSON,
@@ -31,6 +34,10 @@ import {
 
 export interface AddTaskRequest {
     task: Task;
+}
+
+export interface AddUserRequest {
+    addUserDto: AddUserDto;
 }
 
 export interface AssignTaskRequest {
@@ -69,6 +76,19 @@ export interface DefaultApiInterface {
     /**
      */
     addTask(requestParameters: AddTaskRequest, initOverrides?: RequestInit): Promise<Task>;
+
+    /**
+     * 
+     * @param {AddUserDto} addUserDto 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DefaultApiInterface
+     */
+    addUserRaw(requestParameters: AddUserRequest, initOverrides?: RequestInit): Promise<runtime.ApiResponse<User>>;
+
+    /**
+     */
+    addUser(requestParameters: AddUserRequest, initOverrides?: RequestInit): Promise<User>;
 
     /**
      * 
@@ -214,6 +234,45 @@ export class DefaultApi extends runtime.BaseAPI implements DefaultApiInterface {
      */
     async addTask(requestParameters: AddTaskRequest, initOverrides?: RequestInit): Promise<Task> {
         const response = await this.addTaskRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     */
+    async addUserRaw(requestParameters: AddUserRequest, initOverrides?: RequestInit): Promise<runtime.ApiResponse<User>> {
+        if (requestParameters.addUserDto === null || requestParameters.addUserDto === undefined) {
+            throw new runtime.RequiredError('addUserDto','Required parameter requestParameters.addUserDto was null or undefined when calling addUser.');
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+        const response = await this.request({
+            path: `/api/users`,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: AddUserDtoToJSON(requestParameters.addUserDto),
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => UserFromJSON(jsonValue));
+    }
+
+    /**
+     */
+    async addUser(requestParameters: AddUserRequest, initOverrides?: RequestInit): Promise<User> {
+        const response = await this.addUserRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
